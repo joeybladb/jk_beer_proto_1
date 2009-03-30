@@ -1,0 +1,8 @@
+//
+// Prefix header for all source files of the 'JK-Beer-Proto-1' target in the 'JK-Beer-Proto-1' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+#endif
