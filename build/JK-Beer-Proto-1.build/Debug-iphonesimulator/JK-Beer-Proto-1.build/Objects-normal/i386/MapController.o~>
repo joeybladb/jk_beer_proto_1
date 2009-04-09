@@ -1,0 +1,5 @@
+/Users/joeman/Development/jk-beer-proto-1/Classes/MapController.m: In function '-[MapController viewDidLoad]':
+/Users/joeman/Development/jk-beer-proto-1/Classes/MapController.m:134: warning: no '-initWithFrame:andCanvasRect:' method found
+/Users/joeman/Development/jk-beer-proto-1/Classes/MapController.m:134: warning: (Messages without a matching method signature
+/Users/joeman/Development/jk-beer-proto-1/Classes/MapController.m:134: warning: will be assumed to return 'id' and accept
+/Users/joeman/Development/jk-beer-proto-1/Classes/MapController.m:134: warning: '...' as arguments.)

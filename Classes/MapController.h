@@ -8,10 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+@class MapObject;
+@class MapView;
+@class MapLabelView;
+@class Shape;
+
 
 @interface MapController : UIViewController <UIScrollViewDelegate> {
-	IBOutlet UIView* mMapView;
+	IBOutlet MapView* mMapView;
 	IBOutlet UIScrollView* mScroller;
+	MapLabelView* mLabel;
+	Shape* mFestivalGrounds;
 }
+
+-(void)objectClicked:(MapObject*)object;
 
 @end

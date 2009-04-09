@@ -164,6 +164,13 @@
 }
 
 
+- (void)gotoMap:(id)sender
+{
+	MapController *anotherViewController = [[MapController alloc] initWithNibName:@"MapController" bundle:nil];
+	[self.navigationController pushViewController:anotherViewController animated:YES];
+	[anotherViewController release];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // Navigation logic may go here. Create and push another view controller.
 	if (indexPath.section == 1)
@@ -174,13 +181,6 @@
 		[self.navigationController pushViewController:anotherViewController animated:YES];
 		[anotherViewController release];
 	}
-}
-
-- (void)gotoMap:(id)sender
-{
-	MapController *anotherViewController = [[MapController alloc] initWithNibName:@"MapController" bundle:nil];
-	[self.navigationController pushViewController:anotherViewController animated:YES];
-	[anotherViewController release];
 }
 
 

@@ -8,7 +8,8 @@
 
 #import "JK_Beer_Proto_1AppDelegate.h"
 #import "RootViewController.h"
-
+#import "FestivalDatabase.h"
+#import "Shape.h"
 
 @implementation JK_Beer_Proto_1AppDelegate
 
@@ -18,6 +19,10 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
 	
+	// Instantiate the database:
+	NSURL* serverURL = [NSURL URLWithString:@"http://beerphest.com/pdx/summary-xml"];
+	[[FestivalDatabase alloc] initWithURL:serverURL];
+	
 	// Configure and show the window
 	[window addSubview:[navigationController view]];
 	[window makeKeyAndVisible];
@@ -26,8 +31,13 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
 	// Save data if appropriate
+	[[FestivalDatabase sharedDatabase] cacheContents];
 }
 
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application      // try to clean up as much memory as possible. next step is to terminate app
+{
+	[Shape clearCachedData];
+}
 
 - (void)dealloc {
 	[navigationController release];
