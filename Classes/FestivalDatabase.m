@@ -24,18 +24,18 @@ FestivalDatabase* sDatabase = nil;
 	if (self)
 	{
 		NSMutableArray* a = [NSMutableArray arrayWithCapacity:100];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"restrooms.gif" atLocation:CGPointMake(50, 30) interactingWithUser:YES]];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"info.gif" atLocation:CGPointMake(300, 200) interactingWithUser:YES]];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"smoking.gif" atLocation:CGPointMake(80, 300) interactingWithUser:YES]];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"trash.gif" atLocation:CGPointMake(450, 800) interactingWithUser:YES]];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"restrooms.gif" atLocation:CGPointMake(10, 940) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"restrooms.gif" atLocation:CGPointMake(50, 30) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"info.gif" atLocation:CGPointMake(300, 200) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"smoking.gif" atLocation:CGPointMake(80, 300) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"trash.gif" atLocation:CGPointMake(450, 800) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"restrooms.gif" atLocation:CGPointMake(10, 940) interactingWithUser:YES]];
 //		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"hops.png" atLocation:CGPointMake(10, 200) interactingWithUser:YES]];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 150) interactingWithUser:YES]];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 800) interactingWithUser:YES]];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(200, 150) interactingWithUser:YES]];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 800) interactingWithUser:YES]];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(200, 500) interactingWithUser:YES]];
-		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 600) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 150) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 800) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(200, 150) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 800) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(200, 500) interactingWithUser:YES]];
+//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 600) interactingWithUser:YES]];
 
 		mLocatables = [a retain];
 		sDatabase = self;

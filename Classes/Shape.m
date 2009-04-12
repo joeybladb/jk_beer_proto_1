@@ -9,6 +9,25 @@
 #import "Shape.h"
 #import "UIColor+Components.h"
 
+NS_INLINE double RadiansToDegrees(double degrees)
+{
+	const double conversion = 3.1415926535 / 180.0;
+	return degrees * conversion;
+}
+
+NS_INLINE GeoPoint Rotate(GeoPoint point, double angle)
+{ 
+	float xold,yold;
+	GeoPoint newpoint;
+	angle = RadiansToDegrees(angle);
+	xold=point.x;
+	yold=point.y;
+	newpoint.x= xold*cos(angle)-yold*sin(angle);
+	newpoint.y= xold*sin(angle)+yold*cos(angle);
+	return newpoint;
+}
+
+
 NSData* CGPointToNSData(CGPoint p)
 {
 	CGPoint local = p;
@@ -166,7 +185,7 @@ NSMutableDictionary* sSignCache = nil;
 	mOps = [newArray retain];
 }
 
--(CGRect) enclosingRectangleShouldFlip:(BOOL)flip	// Calculate a rectangle big enough to hold all the bits of the shape.
+-(CGRect) enclosingRectangleShouldFlip:(BOOL)flip rotatingByAngle:(double)angle	// Calculate a rectangle big enough to hold all the bits of the shape.
 {
 	// find min and max vertices etc.
 	double minX = 1000000.0, maxX = -1000000.0, minY = 1000000.0, maxY = -1000000.0;
@@ -176,9 +195,12 @@ NSMutableDictionary* sSignCache = nil;
 	while (nil != (d = [e nextObject]))
 	{
 		// For right now, just look for points:
-		GeoPoint* p = [d objectForKey:OPKEY_COORD];
-		if (p)
+		NSData* data = (NSData*) [d objectForKey:OPKEY_COORD];
+		if (data)
 		{
+//			GeoPoint p = Rotate([data geoPoint], angle);
+			GeoPoint p = [data geoPoint];
+
 			minX = MIN(minX, p.x);
 			maxX = MAX(maxX, p.x);
 			minY = MIN(minY, p.y);
@@ -194,7 +216,7 @@ NSMutableDictionary* sSignCache = nil;
 
 -(void)renderInContext:(CGContextRef)ctx withViewFrame:(CGRect)frame
 {
-	CGRect encFrame = [self enclosingRectangleShouldFlip:NO];
+	CGRect encFrame = [self enclosingRectangleShouldFlip:NO rotatingByAngle:(double)0.0];
 	double xRatio = frame.size.width / encFrame.size.width, yRatio = frame.size.height / encFrame.size.height;
 	
 	NSDictionary* d;
@@ -207,22 +229,12 @@ NSMutableDictionary* sSignCache = nil;
 		ShapeOp op = (ShapeOp) [[d objectForKey:OPKEY_OP] intValue];
 		UIColor* fillColor = nil, *strokeColor = nil;
 
-		GeoPoint* p = [d objectForKey:OPKEY_COORD];	// Fetch coordinate if available, and translate-scale-translate to new coordinates.
-		if (p)
-		{
-			p.x = (p.x - encFrame.origin.x) * xRatio + frame.origin.x;
-			p.y = frame.size.height - ((p.y - encFrame.origin.y) * yRatio /*+ frame.origin.y*/);
-//			NSLog(@"Draw coordinate: %@", NSStringFromCGPoint(p));
-//			NSString* str = [NSString stringWithFormat:@"%d : (%0.3f,%0.3f)", nPt, p.x, p.y];
-//			CGContextSelectFont(ctx, "Courier", 14, kCGEncodingMacRoman);
-//			CGAffineTransform transform = CGAffineTransformMake(
-//											  1.0,0.0, 0.0, -1.0, 0.0, 0.0
-//			);
-//			
-//			CGContextSetTextMatrix(ctx, transform);			
-//			CGContextShowTextAtPoint(ctx, p.x + 8, p.y + 8, [str UTF8String], [str length]);
-//			nPt++;
-		}
+		GeoPoint p = [(NSData*)[d objectForKey:OPKEY_COORD] geoPoint];	// Fetch coordinate if available, and translate-scale-translate to new coordinates.
+		p.x = (p.x - encFrame.origin.x) * xRatio + frame.origin.x;
+		p.y = (frame.origin.y + frame.size.height) - ((p.y - encFrame.origin.y) * yRatio );
+
+		// Rotate the points
+		p = Rotate(p, 0.0);
 		
 		// Grab some params. 
 		CGFloat lineWidth = 0;
@@ -274,6 +286,31 @@ NSMutableDictionary* sSignCache = nil;
 				CGContextSetLineJoin(ctx, join);
 				CGContextDrawPath(ctx, kCGPathEOFillStroke);
 				break;
+			
+			case ShapeSign:
+			{
+				UIImage* img = [Shape imageForSign:(ShapeSignType)[[d objectForKey:OPKEY_SIGN] intValue]];
+				if (img)
+				{
+					CGSize sz = img.size;
+					CGRect r = CGRectMake(p.x - sz.width / 2, p.y - sz.height / 2, sz.width, sz.height);
+					[img drawInRect:r];
+				}
+				break;
+			}
+				
+			case ShapeTree:
+			{	// For now, just draw a circle.
+				TreeType tt = [[d objectForKey:OPKEY_TREE] intValue];
+				int treeSize = 10 + (5 * tt);
+				CGRect treeRect = CGRectMake(p.x - treeSize / 2, p.y - treeSize / 2, treeSize, treeSize);
+				CGContextSetFillColor(ctx, [[UIColor colorWithRed:.44 green:.63 blue:.3 alpha:1.0] components]);
+				CGContextFillEllipseInRect(ctx, treeRect);
+				CGContextSetStrokeColor(ctx, [[UIColor colorWithRed:0.23 green:0.37 blue:0.17 alpha:1.0] components]);
+				CGContextSetLineWidth(ctx, 1.0);
+				CGContextStrokeEllipseInRect(ctx, treeRect);
+			}	
+				break;
 
 			default:
 				NSAssert(NO, @"bad draw opcode!");
@@ -289,15 +326,16 @@ NSMutableDictionary* sSignCache = nil;
 
 @end
 
-@implementation GeoPoint
-@synthesize x,y;
--(id)init
+@implementation NSData (GeoPoint)
++(NSData*)dataWithGeoPoint:(GeoPoint)p
 {
-	self = [super init];
-	if (self)
-	{
-		x=y=0.0;
-	}
-	return self;
+	return [NSData dataWithBytes:&p length:sizeof(p)];
+}
+
+-(GeoPoint)geoPoint
+{
+	GeoPoint p;
+	[self getBytes:&p length:sizeof(p)];
+	return p;
 }
 @end

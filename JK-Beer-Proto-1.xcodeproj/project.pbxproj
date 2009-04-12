@@ -142,20 +142,11 @@
 				1D3623250D0F684500981E51 /* JK_Beer_Proto_1AppDelegate.m */,
 				C4148B110F7FFC7400838088 /* ListController.h */,
 				C4148B120F7FFC7400838088 /* ListController.m */,
-				C4148B2B0F80000400838088 /* MapController.h */,
-				C4148B2C0F80000400838088 /* MapController.m */,
 				C4148B510F80081A00838088 /* BeerController.h */,
 				C4148B520F80081A00838088 /* BeerController.m */,
-				C4148C3C0F85858700838088 /* MapView.h */,
-				C4148C3D0F85858700838088 /* MapView.m */,
-				C4148EBD0F88249600838088 /* MapLabelView.h */,
-				C4148EBE0F88249600838088 /* MapLabelView.m */,
-				C4148D100F880C0200838088 /* Shape.h */,
-				C4148D110F880C0200838088 /* Shape.m */,
+				C4A168870F91E756002C37D7 /* Map */,
 				C414901D0F8868AD00838088 /* UIColor+Components.h */,
 				C414901E0F8868AD00838088 /* UIColor+Components.m */,
-				C4148C9C0F88012D00838088 /* MapObject.h */,
-				C4148C9D0F88012D00838088 /* MapObject.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -241,6 +232,23 @@
 				C4148DAA0F881A1200838088 /* womensrr.gif */,
 			);
 			path = imgs;
+			sourceTree = "<group>";
+		};
+		C4A168870F91E756002C37D7 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				C4148B2B0F80000400838088 /* MapController.h */,
+				C4148B2C0F80000400838088 /* MapController.m */,
+				C4148C3C0F85858700838088 /* MapView.h */,
+				C4148C3D0F85858700838088 /* MapView.m */,
+				C4148EBD0F88249600838088 /* MapLabelView.h */,
+				C4148EBE0F88249600838088 /* MapLabelView.m */,
+				C4148D100F880C0200838088 /* Shape.h */,
+				C4148D110F880C0200838088 /* Shape.m */,
+				C4148C9C0F88012D00838088 /* MapObject.h */,
+				C4148C9D0F88012D00838088 /* MapObject.m */,
+			);
+			name = Map;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

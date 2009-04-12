@@ -21,6 +21,7 @@ typedef enum
 	ShapeFill,
 	ShapeFillThenStroke,
 	ShapeSign,
+	ShapeTree,
 } ShapeOp;
 
 typedef enum
@@ -48,6 +49,13 @@ typedef enum
 	SignBeer			// MOST IMPORTANT
 } ShapeSignType;	// These are some DOT approved signs
 
+typedef enum
+{
+	TreeSmall,
+	TreeMedium,
+	TreeLarge
+} TreeType;
+
 // Build up a shape by adding dictionaries which concist of the following keys:
 #define OPKEY_OP @"OP"				// NSNumber int ShapeOp
 #define OPKEY_COORD @"PT"			// MoveTo/LineTo: GeoPoint;
@@ -60,6 +68,7 @@ typedef enum
 #define OPKEY_LINE_CAP_STYLE @"CS"	// Stroke: NSNumber int CGLineCap
 #define OPKEY_LINE_JOIN_STYLE @"JS"	// Stroke: NSNumber int CGLineJoin
 #define OPKEY_SIGN @"SIGN"			// Sign: NSNumber int ShapeSignType. Will be centered around point specified by OPKEY_COORD.
+#define OPKEY_TREE @"TR"			// Tree Type: NSNumber int TreeType. Centered on OPKEY_COORD.
 
 NSData* CGPointToNSData(CGPoint p);
 CGPoint NSDataToCGPoint(NSData* d);
@@ -74,7 +83,7 @@ CGPoint NSDataToCGPoint(NSData* d);
 
 -(void)addOp:(NSDictionary*) dict;
 
--(CGRect) enclosingRectangleShouldFlip:(BOOL)flip;	// Calculate a rectangle big enough to hold all the bits of the shape. Flip will flip the rectangle, say if we know the points are geographical coordinates.
+-(CGRect) enclosingRectangleShouldFlip:(BOOL)flip rotatingByAngle:(double)angle;	// Calculate a rectangle big enough to hold all the bits of the shape. Flip will flip the rectangle, say if we know the points are geographical coordinates.
 -(CGRect) enclosingViewRectangeForCanvasRect:(CGRect)canvas;	// Given a canvas rect in view coordinates, return the shape's enclosing  rectangle, also in view coordinates. Canvas = the portion we wish to map.
 
 -(void)renderInContext:(CGContextRef)ctx withViewFrame:(CGRect)frame;
@@ -82,12 +91,13 @@ CGPoint NSDataToCGPoint(NSData* d);
 @end
 
 
-@interface GeoPoint : NSObject
-{
-	double x, y;
-}
-@property double x;
-@property double y;
+typedef struct {double x,y;} GeoPoint;
+
+
+@interface NSData (GeoPoint)
++(NSData*)dataWithGeoPoint:(GeoPoint)p;
+-(GeoPoint)geoPoint;
 @end
 
-NS_INLINE GeoPoint* GPMAKE(double x, double y) { GeoPoint* g=[[[GeoPoint alloc] init] autorelease]; g.x=x;g.y=y; return g;}
+NS_INLINE GeoPoint GPMAKE(double x, double y) { GeoPoint p; p.x=x; p.y=y; return p;}				// Make a static GeoPoint.
+NS_INLINE NSData* GPMAKE_D(double x, double y) { return [NSData dataWithGeoPoint:GPMAKE(x,y)]; }	// Make an NSData containing a GeoPoint -- for storing in arrays, dictionaries etc.
