@@ -14,7 +14,6 @@
 #import "Shape.h"
 #import "UIColor+Components.h"
 
-
 @implementation MapController
 
 /*
@@ -36,224 +35,25 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
-//	NSLog(@"*** mapFrame = %@", NSStringFromRect(NSRectFromCGRect(mMapView.frame)));
+	[self initFestivalGrounds];
 
-	// Build the festival grounds shape by hand. In the future, this will be read in from a url, and stored in the FestivalDatabase.
-	mFestivalGrounds = [[Shape alloc] init];
-
-	// Starting at Morrison Bridge and Naito Parkway, go north:
-	NSDictionary* d = [NSDictionary dictionaryWithObjectsAndKeys:
-						[NSNumber numberWithInt:ShapeMoveTo], OPKEY_OP,
-						GPMAKE_D(-122.67171800, 45.518568), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-			 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-			 GPMAKE_D(-122.671246, 45.519588), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-		 GPMAKE_D(-122.670860, 45.520295), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-		 GPMAKE_D(-122.670696, 45.520528), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-		 GPMAKE_D(-122.670189, 45.521593), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-		 GPMAKE_D(-122.670085, 45.521964), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-	
-//	d = [NSDictionary dictionaryWithObjectsAndKeys:
-//		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-//		 GPMAKE_D(-122.670098, 45.522359), OPKEY_COORD, nil];
-//	[mFestivalGrounds addOp:d];
-
-//	// Burnside bridge
-//	d = [NSDictionary dictionaryWithObjectsAndKeys:
-//		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-//		 GPMAKE_D(-122.670206, 45.522957), OPKEY_COORD, nil];
-//	[mFestivalGrounds addOp:d];
-//
-//	// From Burnside bridge and the Wilamette, head south
-//	d = [NSDictionary dictionaryWithObjectsAndKeys:
-//		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-//		 GPMAKE_D(-122.669448, 45.522961), OPKEY_COORD, nil];
-//	[mFestivalGrounds addOp:d];
-
-//	d = [NSDictionary dictionaryWithObjectsAndKeys:
-//		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-//		 GPMAKE_D(-122.669447, 45.522370), OPKEY_COORD, nil];
-//	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-		 GPMAKE_D(-122.669523, 45.521896), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-		 GPMAKE_D(-122.669584, 45.521558), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-		 GPMAKE_D(-122.670063, 45.520303), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-		 GPMAKE_D(-122.670522, 45.519582), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-	
-	// The Morrison bridge and Willamette
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-		 GPMAKE_D(-122.671180, 45.518374), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-
-	// Finally back to Morrison and Naito.
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeLineTo], OPKEY_OP,
-		 GPMAKE_D(-122.671718, 45.518568), OPKEY_COORD, nil];
-	[mFestivalGrounds addOp:d];
-	
-	UIColor* strokeColor = [UIColor colorWithRed:.23 green:.37 blue:.4 alpha:1.0], *fillColor = [UIColor colorWithRed:0.70 green:0.89 blue:0.70 alpha:0.8];
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeFillThenStroke], OPKEY_OP,
-		 fillColor, OPKEY_FILL_COLOR,
-		 strokeColor, OPKEY_STROKE_COLOR, 
-		 [NSNumber numberWithFloat:1.0], OPKEY_LINE_WIDTH,
-		 [NSNumber numberWithInt:kCGLineCapRound], OPKEY_LINE_CAP_STYLE, nil];
-	[mFestivalGrounds addOp:d];
-	
-	// Add trees
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.671128, 45.518493), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeSmall], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.671061, 45.518619), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeSmall], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670913, 45.518844), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670796, 45.519089), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670628, 45.519348), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-/////
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670479, 45.519598), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670347, 45.519820), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670213, 45.520109), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670072, 45.520362), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669940, 45.520633), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669848, 45.520883), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669782, 45.521153), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669697, 45.521411), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669634, 45.521700), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669604, 45.521938), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeSign], OPKEY_OP,
-		 GPMAKE_D(-122.671290, 45.518659), OPKEY_COORD, 
-		 [NSNumber numberWithInt:SignRestrooms], OPKEY_SIGN, nil];
-	[mFestivalGrounds addOp:d];
-
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeSign], OPKEY_OP,
-		 GPMAKE_D(-122.669859, 45.521734), OPKEY_COORD, 
-		 [NSNumber numberWithInt:SignRestrooms], OPKEY_SIGN, nil];
-	[mFestivalGrounds addOp:d];
-	
-	
-	
-	CGRect bounds = [mFestivalGrounds enclosingRectangleShouldFlip:YES rotatingByAngle:(double)0.0];
-	// First pass, assume y > x
-	// 
 #define CANVAS_INSET 10.0
-#define START_WIDTH 320	
-	CGRect viewRect = CGRectMake(0, 0, START_WIDTH + CANVAS_INSET * 2.0, START_WIDTH * (bounds.size.height / bounds.size.width) + CANVAS_INSET * 2.0);
-	CGRect canvasRect = CGRectInset(viewRect, 10, 10);
+#define START_WIDTH 300
 	
-	mMapView = [[MapView alloc] initWithFrame:viewRect andCanvasRect:canvasRect];	// Mapview will automatically populate itself with subviews corresponding to locatable objects in the database.
+	// Calculate the map view rect and the "canvas" rect. The map objects will live and draw within the "canvas" rect.
+	// First pass, assume y > x
+	CGRect bounds = [mFestivalGrounds enclosingRectangleShouldFlip:YES rotatingByAngle:(double)0.0];	// This is the rect enclosing the entire festival.
+	mOriginalMapFrame = CGRectMake(0, 0, START_WIDTH + CANVAS_INSET * 2.0, START_WIDTH * (bounds.size.height / bounds.size.width) + CANVAS_INSET * 2.0);
+	CGRect canvasRect = CGRectInset(mOriginalMapFrame, CANVAS_INSET, CANVAS_INSET);
+	
+	// Build the map view:
+	mMapView = [[MapView alloc] initWithFrame:mOriginalMapFrame andCanvasRect:canvasRect];	// Mapview will automatically populate itself with subviews corresponding to locatable objects in the database.
 	mMapView.backgroundColor = [UIColor colorWithRed:.95 green:.95 blue:.81 alpha:1.0];
 	[(MapView*)mMapView setController:self];
 	[(MapView*)mMapView setBackgroundShape:mFestivalGrounds];
+	mMapView.contentMode = UIViewContentModeRedraw;
 
+	// Put the map view IN the scroller, fix up the settings on the scroller.
 	mScroller.contentSize = CGSizeMake(mMapView.frame.size.width, mMapView.frame.size.height);
 	mScroller.maximumZoomScale = 4.0;
 	mScroller.minimumZoomScale = 0.5;
@@ -261,12 +61,12 @@
 	mScroller.delegate = self;
     [mScroller addSubview:mMapView];
 	
-
+	[self scrollViewDidEndZooming:mScroller withView:mMapView atScale:1.0];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-
+//	NSLog(@"Content offset = %@", NSStringFromCGPoint(scrollView.contentOffset));
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView     // return a view that will be scaled. if delegate returns nil, nothing happens
@@ -276,10 +76,49 @@
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale // scale between minimum and maximum. called after any 'bounce' animations
 {
+	NSLog(@"END ZOOM. Scroller frame=%@, bounds=%@, contentOffset=%@", NSStringFromCGRect(scrollView.frame), NSStringFromCGRect(scrollView.bounds), NSStringFromCGPoint(scrollView.contentOffset));
+
+	CGAffineTransform tx = mMapView.transform;
+	NSLog(@"MapView layer scale x = %0.3f, y = %0.3f", tx.a, tx.d);
+	NSLog(@"MapView frame=%@, bounds=%@, center=%@", NSStringFromCGRect(mMapView.frame), NSStringFromCGRect(mMapView.bounds), NSStringFromCGPoint(mMapView.center));
+	
+	// Most likely the map view's frame has been scaled, and its layer transform has been scaled.
+	// This is not what we want because any drawing will look aliased and crappy. We wish to immitate the effect we get
+	// in Cocoa when we set bounds > frame of a view. Drawing is preserved.
+	
+	// Set up a new canvas rect, which is inset slightly from the (newly scaled) map frame.
+	CGRect newCanvasRect = CGRectInset(mMapView.frame, CANVAS_INSET * scale, CANVAS_INSET * scale);
+	mMapView.bounds = mMapView.frame;
+	mMapView.canvasRect = newCanvasRect;
+	mMapView.scale = scale;
+	
+	// Set the affine scale back to 1.0. This way, we'll draw with real coordinates. The scaling will be done procedurally by the Shape objects.
+	tx.a = tx.d = 1.0;
+	mMapView.transform = tx;
+	
 	[mMapView setNeedsDisplay];
-//	CGRect f = view.frame;
-	NSLog(@"-scrollViewDidEndZooming new scale = %0.3f", scale);
-	NSLog(@"New bounds = %@", NSStringFromCGRect(view.bounds));
+	[mScroller setNeedsDisplay];
+	
+//	NSLog(@"-scrollViewDidEndZooming new scale = %0.3f", scale);
+//	CGAffineTransform tx = mMapView.transform;
+//	NSLog(@"scale x = %0.3f, y = %0.3f", tx.a, tx.d);
+//	tx.a = tx.d = 1.0;
+//	mMapView.transform = tx;
+//	CGPoint offset = scrollView.contentOffset;
+//	offset = CGPointMake(offset.x / scale, offset.y / scale);
+//	scrollView.contentSize = mMapView.frame.size;
+////	scrollView.contentOffset = offset;
+//	
+//	CGSize oldMapSize = mOriginalMapFrame.size;
+//	CGRect newMapRect = CGRectMake(0, 0, oldMapSize.width * scale, oldMapSize.height * scale);
+//	CGRect newCanvasRect = CGRectMake(CANVAS_INSET * scale, CANVAS_INSET * scale, mMapView.frame.size.width, mMapView.frame.size.height);
+//	mMapView.frame = newMapRect;
+//	mMapView.canvasRect = newCanvasRect;
+//	
+//	NSLog(@"New bounds = %@, frame = %@", NSStringFromCGRect(mMapView.bounds), NSStringFromCGRect(mMapView.frame));
+//	[scrollView setNeedsDisplay];
+//	[mMapView setNeedsDisplay];
+	
 }
 
 

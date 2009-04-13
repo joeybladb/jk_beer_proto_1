@@ -86,7 +86,7 @@ CGPoint NSDataToCGPoint(NSData* d);
 -(CGRect) enclosingRectangleShouldFlip:(BOOL)flip rotatingByAngle:(double)angle;	// Calculate a rectangle big enough to hold all the bits of the shape. Flip will flip the rectangle, say if we know the points are geographical coordinates.
 -(CGRect) enclosingViewRectangeForCanvasRect:(CGRect)canvas;	// Given a canvas rect in view coordinates, return the shape's enclosing  rectangle, also in view coordinates. Canvas = the portion we wish to map.
 
--(void)renderInContext:(CGContextRef)ctx withViewFrame:(CGRect)frame;
+-(void)renderInContext:(CGContextRef)ctx withViewFrame:(CGRect)frame andScale:(CGFloat)scale;
 
 @end
 

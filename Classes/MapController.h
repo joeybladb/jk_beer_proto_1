@@ -19,8 +19,14 @@
 	IBOutlet UIScrollView* mScroller;
 	MapLabelView* mLabel;
 	Shape* mFestivalGrounds;
+	CGRect mOriginalMapFrame;
 }
 
 -(void)objectClicked:(MapObject*)object;
 
 @end
+
+@interface MapController (FestivalGrounds)
+-(void)initFestivalGrounds;
+@end
+

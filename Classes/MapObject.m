@@ -47,7 +47,7 @@
 	{	// If we've got a shape, draw it.
 		CGContextRef ctx = UIGraphicsGetCurrentContext();
 		CGRect canvasRect = ((MapView*)self.superview).canvasRect;
-		[shape renderInContext:ctx withViewFrame:canvasRect];
+		[shape renderInContext:ctx withViewFrame:canvasRect andScale:((MapView*)self.superview).scale];
 	}
 	else	
 		[mCachedImage drawAtPoint:CGPointMake(0,0)];

@@ -14,6 +14,7 @@
 @implementation MapView
 
 @synthesize canvasRect=mCanvasRect;
+@synthesize scale=mScale;
 
 -(MapController*)controller
 {
@@ -33,6 +34,7 @@
 - (id)initWithFrame:(CGRect)frame andCanvasRect:(CGRect)canvas {
     if (self = [super initWithFrame:frame]) {
         // Initialization code
+		mScale = 1.0;
 		mCanvasRect = canvas;
 		// Populate the map with map objects
 		NSArray* locs = [[FestivalDatabase sharedDatabase] locatables];
@@ -47,7 +49,9 @@
 
 - (void)drawRect:(CGRect)rect {
     CGContextRef ctx = UIGraphicsGetCurrentContext(); 
-	[mBackgroundShape renderInContext:ctx withViewFrame:self.canvasRect];
+	CGAffineTransform tx = CGContextGetCTM(ctx);
+	NSLog(@"DRAWING: Scale x=%0.1f, y=%0.1f, canvas=%@", tx.a, tx.d, NSStringFromCGRect(self.canvasRect));
+	[mBackgroundShape renderInContext:ctx withViewFrame:self.canvasRect andScale:self.scale];
 }
 
 

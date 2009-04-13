@@ -51,6 +51,7 @@
 		C4148EBF0F88249600838088 /* MapLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148EBE0F88249600838088 /* MapLabelView.m */; };
 		C4148EC10F8824DF00838088 /* MapLabelView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4148EC00F8824DF00838088 /* MapLabelView.xib */; };
 		C414901F0F8868AD00838088 /* UIColor+Components.m in Sources */ = {isa = PBXBuildFile; fileRef = C414901E0F8868AD00838088 /* UIColor+Components.m */; };
+		C4C024EB0F925CE9007E5B3B /* MapControllerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C4C024EA0F925CE9007E5B3B /* MapControllerAdditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -113,6 +114,7 @@
 		C4148EC00F8824DF00838088 /* MapLabelView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapLabelView.xib; sourceTree = "<group>"; };
 		C414901D0F8868AD00838088 /* UIColor+Components.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Components.h"; sourceTree = "<group>"; };
 		C414901E0F8868AD00838088 /* UIColor+Components.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Components.m"; sourceTree = "<group>"; };
+		C4C024EA0F925CE9007E5B3B /* MapControllerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapControllerAdditions.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,6 +241,7 @@
 			children = (
 				C4148B2B0F80000400838088 /* MapController.h */,
 				C4148B2C0F80000400838088 /* MapController.m */,
+				C4C024EA0F925CE9007E5B3B /* MapControllerAdditions.m */,
 				C4148C3C0F85858700838088 /* MapView.h */,
 				C4148C3D0F85858700838088 /* MapView.m */,
 				C4148EBD0F88249600838088 /* MapLabelView.h */,
@@ -351,6 +354,7 @@
 				C4148D120F880C0200838088 /* Shape.m in Sources */,
 				C4148EBF0F88249600838088 /* MapLabelView.m in Sources */,
 				C414901F0F8868AD00838088 /* UIColor+Components.m in Sources */,
+				C4C024EB0F925CE9007E5B3B /* MapControllerAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

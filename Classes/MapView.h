@@ -15,9 +15,11 @@
 	MapController* mController;
 	Shape* mBackgroundShape;
 	CGRect mCanvasRect;
+	CGFloat mScale;
 }
 
 @property CGRect canvasRect;
+@property CGFloat scale;
 
 - (id)initWithFrame:(CGRect)frame andCanvasRect:(CGRect)canvas;
 

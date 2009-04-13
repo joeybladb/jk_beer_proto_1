@@ -214,7 +214,7 @@ NSMutableDictionary* sSignCache = nil;
 	return CGRectMake(minX, minY, maxX-minX, maxY-minY); 
 }
 
--(void)renderInContext:(CGContextRef)ctx withViewFrame:(CGRect)frame
+-(void)renderInContext:(CGContextRef)ctx withViewFrame:(CGRect)frame andScale:(CGFloat)scale
 {
 	CGRect encFrame = [self enclosingRectangleShouldFlip:NO rotatingByAngle:(double)0.0];
 	double xRatio = frame.size.width / encFrame.size.width, yRatio = frame.size.height / encFrame.size.height;
@@ -293,6 +293,8 @@ NSMutableDictionary* sSignCache = nil;
 				if (img)
 				{
 					CGSize sz = img.size;
+					sz.width *= scale;
+					sz.height *= scale;
 					CGRect r = CGRectMake(p.x - sz.width / 2, p.y - sz.height / 2, sz.width, sz.height);
 					[img drawInRect:r];
 				}
@@ -302,7 +304,7 @@ NSMutableDictionary* sSignCache = nil;
 			case ShapeTree:
 			{	// For now, just draw a circle.
 				TreeType tt = [[d objectForKey:OPKEY_TREE] intValue];
-				int treeSize = 10 + (5 * tt);
+				int treeSize = (10 + (5 * tt)) * scale;
 				CGRect treeRect = CGRectMake(p.x - treeSize / 2, p.y - treeSize / 2, treeSize, treeSize);
 				CGContextSetFillColor(ctx, [[UIColor colorWithRed:.44 green:.63 blue:.3 alpha:1.0] components]);
 				CGContextFillEllipseInRect(ctx, treeRect);
