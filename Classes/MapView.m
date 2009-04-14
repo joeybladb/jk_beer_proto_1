@@ -47,10 +47,9 @@
 }
 
 
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect 
+{
     CGContextRef ctx = UIGraphicsGetCurrentContext(); 
-	CGAffineTransform tx = CGContextGetCTM(ctx);
-	NSLog(@"DRAWING: Scale x=%0.1f, y=%0.1f, canvas=%@", tx.a, tx.d, NSStringFromCGRect(self.canvasRect));
 	[mBackgroundShape renderInContext:ctx withViewFrame:self.canvasRect andScale:self.scale];
 }
 
@@ -59,6 +58,14 @@
     [super dealloc];
 }
 
+- (void)setTransformWithoutScaling:(CGAffineTransform)newTransform;
+{
+    [super setTransform:newTransform];
+}
 
+- (void)setTransform:(CGAffineTransform)newValue;
+{
+    [super setTransform:CGAffineTransformScale(newValue, 1.0f / mScale, 1.0f / mScale)];
+}
 
 @end

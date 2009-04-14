@@ -51,12 +51,13 @@
 	mMapView.backgroundColor = [UIColor colorWithRed:.95 green:.95 blue:.81 alpha:1.0];
 	[(MapView*)mMapView setController:self];
 	[(MapView*)mMapView setBackgroundShape:mFestivalGrounds];
-	mMapView.contentMode = UIViewContentModeRedraw;
+	CGAffineTransform tx = mMapView.transform;
+	mMapView.transform = tx;
 
 	// Put the map view IN the scroller, fix up the settings on the scroller.
 	mScroller.contentSize = CGSizeMake(mMapView.frame.size.width, mMapView.frame.size.height);
-	mScroller.maximumZoomScale = 4.0;
-	mScroller.minimumZoomScale = 0.5;
+	mScroller.maximumZoomScale = 6.0;
+	mScroller.minimumZoomScale = 1.0;
 	mScroller.clipsToBounds = YES;
 	mScroller.delegate = self;
     [mScroller addSubview:mMapView];
@@ -76,49 +77,29 @@
 
 - (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(float)scale // scale between minimum and maximum. called after any 'bounce' animations
 {
-	NSLog(@"END ZOOM. Scroller frame=%@, bounds=%@, contentOffset=%@", NSStringFromCGRect(scrollView.frame), NSStringFromCGRect(scrollView.bounds), NSStringFromCGPoint(scrollView.contentOffset));
-
-	CGAffineTransform tx = mMapView.transform;
-	NSLog(@"MapView layer scale x = %0.3f, y = %0.3f", tx.a, tx.d);
-	NSLog(@"MapView frame=%@, bounds=%@, center=%@", NSStringFromCGRect(mMapView.frame), NSStringFromCGRect(mMapView.bounds), NSStringFromCGPoint(mMapView.center));
+	// UIScrollView will scale the frame size while also scaling the transform. This makes our drawing look horribly blurry and aliased, not to mention we
+	// do NOT want the subviews to be scaled like that either.
+	// So the trick is to set the transform back to Identity.
 	
-	// Most likely the map view's frame has been scaled, and its layer transform has been scaled.
-	// This is not what we want because any drawing will look aliased and crappy. We wish to immitate the effect we get
-	// in Cocoa when we set bounds > frame of a view. Drawing is preserved.
+	// First, grab the scaled frame size, and set the scroller's contentSize to that.
+	CGRect bigScaledFrame = mMapView.frame;
+	scrollView.contentSize = mMapView.frame.size;
 	
-	// Set up a new canvas rect, which is inset slightly from the (newly scaled) map frame.
+	// Set to Identity transform
+	[mMapView setTransformWithoutScaling:CGAffineTransformIdentity];
+	
+	// Now that we're scaling at 1:1, we can set the view's frame BACK to the big scale
+	mMapView.frame = bigScaledFrame;
+	
+	// Set up a new canvas rect, which is inset slightly from the (newly scaled) map frame. We use this during drawing to actually truly scale our GeoCoordinates to fit.
 	CGRect newCanvasRect = CGRectInset(mMapView.frame, CANVAS_INSET * scale, CANVAS_INSET * scale);
-	mMapView.bounds = mMapView.frame;
 	mMapView.canvasRect = newCanvasRect;
+
+	// Set the actual scale
 	mMapView.scale = scale;
 	
-	// Set the affine scale back to 1.0. This way, we'll draw with real coordinates. The scaling will be done procedurally by the Shape objects.
-	tx.a = tx.d = 1.0;
-	mMapView.transform = tx;
-	
+	// And redraw.
 	[mMapView setNeedsDisplay];
-	[mScroller setNeedsDisplay];
-	
-//	NSLog(@"-scrollViewDidEndZooming new scale = %0.3f", scale);
-//	CGAffineTransform tx = mMapView.transform;
-//	NSLog(@"scale x = %0.3f, y = %0.3f", tx.a, tx.d);
-//	tx.a = tx.d = 1.0;
-//	mMapView.transform = tx;
-//	CGPoint offset = scrollView.contentOffset;
-//	offset = CGPointMake(offset.x / scale, offset.y / scale);
-//	scrollView.contentSize = mMapView.frame.size;
-////	scrollView.contentOffset = offset;
-//	
-//	CGSize oldMapSize = mOriginalMapFrame.size;
-//	CGRect newMapRect = CGRectMake(0, 0, oldMapSize.width * scale, oldMapSize.height * scale);
-//	CGRect newCanvasRect = CGRectMake(CANVAS_INSET * scale, CANVAS_INSET * scale, mMapView.frame.size.width, mMapView.frame.size.height);
-//	mMapView.frame = newMapRect;
-//	mMapView.canvasRect = newCanvasRect;
-//	
-//	NSLog(@"New bounds = %@, frame = %@", NSStringFromCGRect(mMapView.bounds), NSStringFromCGRect(mMapView.frame));
-//	[scrollView setNeedsDisplay];
-//	[mMapView setNeedsDisplay];
-	
 }
 
 

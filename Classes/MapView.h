@@ -28,4 +28,6 @@
 
 -(void)setBackgroundShape:(Shape*)s;
 
+-(void)setTransformWithoutScaling:(CGAffineTransform)newTransform;
+
 @end
