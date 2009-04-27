@@ -8,18 +8,33 @@
 
 #import "Shape.h"
 #import "UIColor+Components.h"
+#import "FestivalDatabase.h"
+#import "LocatableModelObject.h"
+#import "MinMax.h"
+#import "ngiutm.h"
 
-NS_INLINE double RadiansToDegrees(double degrees)
+UTMPoint ConvertGeoToUTMPoint(GeoPoint p)
 {
-	const double conversion = 3.1415926535 / 180.0;
-	return degrees * conversion;
+	UTMPoint u;
+	if (ngi_convert_geodetic_to_utm(p.y, p.x, &u.nZ, &u.eZ, &u.n, &u.e))
+		NSLog(@"*** err: geo to utm conversion!");
+	return u;
 }
+
+GeoPoint ConvertUTMToGeoPoint(UTMPoint u)
+{
+	GeoPoint p;
+	if (ngi_convert_utm_to_geodetic(u.nZ, u.eZ, u.n, u.e, &p.y, &p.x))
+		NSLog(@"*** err: utm to geo conversion!");
+	return p;
+}
+
 
 NS_INLINE GeoPoint Rotate(GeoPoint point, double angle)
 { 
 	float xold,yold;
 	GeoPoint newpoint;
-	angle = RadiansToDegrees(angle);
+	angle = DegreesToRadians(angle);
 	xold=point.x;
 	yold=point.y;
 	newpoint.x= xold*cos(angle)-yold*sin(angle);
@@ -43,11 +58,67 @@ CGPoint NSDataToCGPoint(NSData* d)
 	return p;
 }
 
-
+typedef struct  
+{
+	CGRect geoRect, viewRect;
+} SRectPair;
 
 NSMutableDictionary* sSignCache = nil;
 
 @implementation Shape
+
+-(SRectPair) _pairForRectOp:(NSDictionary*)d andGeometry:(SMapCanvasGeometryDescriptor*)geo	// Given op dictionary w/ Rect opcode and optional geo rectangle, return geo and view rectangles. if geo is nil, then view rectangle will be inoperable.
+{
+	SRectPair pair;
+	double	width = [[d objectForKey:OPKEY_WIDTH_UTM] floatValue], 
+			height = [[d objectForKey:OPKEY_HEIGHT_UTM] floatValue];
+
+	GeoPoint geoPt = [(NSData*) [d objectForKey:OPKEY_COORD] geoPoint];
+	
+	UTMPoint uP = ConvertGeoToUTMPoint(geoPt);
+	UTMPoint uLeftTop = uP, uRightBottom = uP;
+	uLeftTop.e -= width / 2.0;
+	uLeftTop.n -= height / 2.0;
+	uRightBottom.e += width / 2.0;
+	uRightBottom.n += height / 2.0;
+	GeoPoint lt = ConvertUTMToGeoPoint(uLeftTop), rb = ConvertUTMToGeoPoint(uRightBottom);
+	pair.geoRect = CGRectMake(lt.x, lt.y, rb.x-lt.x, rb.y-lt.y);
+	if (geo)
+	{
+		CGPoint gLT = [self convertToViewCoordinate:lt usingGeometry:*geo], gRB = [self convertToViewCoordinate:rb usingGeometry:*geo];
+		pair.viewRect = CGRectStandardize(CGRectMake(gLT.x, gLT.y, gRB.x - gLT.x, gRB.y - gLT.y));
+	}
+	else
+		pair.viewRect = CGRectNull;
+	return pair;
+}
+
+-(CGRect) enclosingGeoRectangle	// Return a rectangle in absolute Geo coordinates, describing the extent of the receiver.
+{
+	// find min and max vertices etc.
+	MinMax mm = MinMaxInit();
+	NSDictionary* d;
+	NSEnumerator* e = [mOps objectEnumerator];
+	
+	while (nil != (d = [e nextObject]))
+	{
+		NSData* data = (NSData*) [d objectForKey:OPKEY_COORD];
+		if (data)
+		{
+			GeoPoint p = [data geoPoint];
+			mm = MinMaxForGeoPoint(mm, p);
+		}
+		
+		ShapeOp op = (ShapeOp) [[d objectForKey:OPKEY_OP] intValue];
+		if (op == ShapeRect)
+		{
+			SRectPair pair = [self _pairForRectOp:d andGeometry:nil];
+			mm = MinMaxForCGRect(mm, pair.geoRect);
+		}
+	}
+	return CGRectFromMinMax(mm);
+}
+
 
 +(UIImage*) imageForSign:(ShapeSignType)sign
 {
@@ -185,56 +256,77 @@ NSMutableDictionary* sSignCache = nil;
 	mOps = [newArray retain];
 }
 
--(CGRect) enclosingRectangleShouldFlip:(BOOL)flip rotatingByAngle:(double)angle	// Calculate a rectangle big enough to hold all the bits of the shape.
++(SMapCanvasGeometryDescriptor) geoDescriptorForFestival:(FestivalDatabase*)db constrainedToWidth:(CGFloat)width insettingViewBy:(CGFloat)inset rotatingByAngle:(CGFloat)degrees
 {
-	// find min and max vertices etc.
-	double minX = 1000000.0, maxX = -1000000.0, minY = 1000000.0, maxY = -1000000.0;
-	NSDictionary* d;
-	NSEnumerator* e = [mOps objectEnumerator];
-
-	while (nil != (d = [e nextObject]))
+	// Given the festbial database, db, calculate the union of all the locatable objects' shapes' extents.
+	NSArray* locs = [[FestivalDatabase sharedDatabase] locatables];
+	NSEnumerator* e = [locs objectEnumerator];
+	LocatableModelObject* l;
+	CGRect biggieRect;
+	BOOL firstTime = YES;
+	while (nil != (l = [e nextObject]))
 	{
-		// For right now, just look for points:
-		NSData* data = (NSData*) [d objectForKey:OPKEY_COORD];
-		if (data)
+		if (firstTime)
 		{
-//			GeoPoint p = Rotate([data geoPoint], angle);
-			GeoPoint p = [data geoPoint];
-
-			minX = MIN(minX, p.x);
-			maxX = MAX(maxX, p.x);
-			minY = MIN(minY, p.y);
-			maxY = MAX(maxY, p.y);
+			biggieRect = [[l shape] enclosingGeoRectangle];
+			firstTime = NO;
 		}
+		else	
+			biggieRect = CGRectUnion(biggieRect, [[l shape] enclosingGeoRectangle]);
+	}
+	NSLog(@"### size of biggieRect before rotation: %@", NSStringFromCGSize(biggieRect.size));
+	if (degrees != 0.0)	// Rotate the biggieRect on its mid point:
+	{
+		CGFloat xOffset = CGRectGetMidX(biggieRect), yOffset = CGRectGetMidY(biggieRect);
+		GeoPoint leftTop = GPMAKE(biggieRect.origin.x - xOffset, biggieRect.origin.y - yOffset);
+		GeoPoint rightBottom = GPMAKE(biggieRect.origin.x + biggieRect.size.width - xOffset, biggieRect.origin.y + biggieRect.size.height - yOffset);
+		leftTop = Rotate(leftTop, degrees);
+		rightBottom = Rotate(rightBottom, degrees);
+		biggieRect.size = CGSizeMake(rightBottom.x-leftTop.x, rightBottom.y-leftTop.y);
+		NSLog(@"### size of biggieRect AFTER rotating %0.2f: %@", degrees, NSStringFromCGSize(biggieRect.size));
 	}
 	
-	if (flip)
-		return CGRectMake(minX, maxY, maxX-minX, maxY-minY); 
+	// Now fill out the fields of the geometry object.
+	SMapCanvasGeometryDescriptor geo;
+	geo.geoBounds = biggieRect;
+	geo.rotationDegrees = degrees;
+	geo.viewFrame = CGRectMake(0, 0, width, width * (geo.geoBounds.size.height / geo.geoBounds.size.width));
+	geo.canvasRect = CGRectInset(geo.viewFrame, inset, inset);
+	geo.localViewFrame = CGRectMake(0,0,0,0);
 
-	return CGRectMake(minX, minY, maxX-minX, maxY-minY); 
+	return geo;
 }
 
--(void)renderInContext:(CGContextRef)ctx withViewFrame:(CGRect)frame andScale:(CGFloat)scale
+-(CGPoint)convertToViewCoordinate:(GeoPoint)geoPoint usingGeometry:(SMapCanvasGeometryDescriptor)geometry
 {
-	CGRect encFrame = [self enclosingRectangleShouldFlip:NO rotatingByAngle:(double)0.0];
-	double xRatio = frame.size.width / encFrame.size.width, yRatio = frame.size.height / encFrame.size.height;
-	
+	double xRatio = geometry.canvasRect.size.width / geometry.geoBounds.size.width, yRatio = geometry.canvasRect.size.height / geometry.geoBounds.size.height;
+	geoPoint.x = (geoPoint.x - geometry.geoBounds.origin.x) * xRatio + geometry.canvasRect.origin.x;	// translate, scale, translate
+	geoPoint.y = (geometry.canvasRect.origin.y + geometry.canvasRect.size.height) - ((geoPoint.y - geometry.geoBounds.origin.y) * yRatio);
+	geoPoint = Rotate(geoPoint, geometry.rotationDegrees);
+	return CGPointMake(geoPoint.x - geometry.localViewFrame.origin.x, geoPoint.y -  geometry.localViewFrame.origin.y);
+}
+
+-(GeoPoint)convertToGeoCoordinate:(CGPoint)point usingGeometry:(SMapCanvasGeometryDescriptor)geometry
+{
+	NSAssert(NO, @"I haven't been implemented yet, dammit!");
+	return GPMAKE(0,0);
+}
+
+
+-(void)renderInContext:(CGContextRef)ctx withGeometry:(SMapCanvasGeometryDescriptor)geometry andScale:(CGFloat)scale
+{
 	NSDictionary* d;
 	NSEnumerator* e = [mOps objectEnumerator];
-	
-//	int nPt = 0;
+	CGContextBeginPath(ctx);
 	
 	while (nil != (d = [e nextObject]))
 	{
 		ShapeOp op = (ShapeOp) [[d objectForKey:OPKEY_OP] intValue];
 		UIColor* fillColor = nil, *strokeColor = nil;
 
-		GeoPoint p = [(NSData*)[d objectForKey:OPKEY_COORD] geoPoint];	// Fetch coordinate if available, and translate-scale-translate to new coordinates.
-		p.x = (p.x - encFrame.origin.x) * xRatio + frame.origin.x;
-		p.y = (frame.origin.y + frame.size.height) - ((p.y - encFrame.origin.y) * yRatio );
-
-		// Rotate the points
-		p = Rotate(p, 0.0);
+		GeoPoint geoPt = [(NSData*)[d objectForKey:OPKEY_COORD] geoPoint];	// Fetch coordinate if available, and translate-scale-translate to new coordinates.
+		CGPoint p;
+		p = [self convertToViewCoordinate:geoPt usingGeometry:geometry];
 		
 		// Grab some params. 
 		CGFloat lineWidth = 0;
@@ -311,17 +403,84 @@ NSMutableDictionary* sSignCache = nil;
 				CGContextStrokeEllipseInRect(ctx, treeRect);
 			}	
 				break;
+				
+			case ShapeRect:
+			{
+				CGFloat rotate = [[d objectForKey:OPKEY_ROTATION_DEG] floatValue];				
+				SRectPair pair = [self _pairForRectOp:d andGeometry:&geometry];
+				CGContextSaveGState(ctx);
+				fillColor = [d objectForKey:OPKEY_FILL_COLOR];
+				if (fillColor)
+					CGContextSetFillColor(ctx, [fillColor components]);
+				strokeColor = [d objectForKey:OPKEY_STROKE_COLOR];
+				if (strokeColor)
+					CGContextSetStrokeColor(ctx, [strokeColor components]);
+				if (rotate != 0.0)
+				{
+					CGContextTranslateCTM(ctx, CGRectGetMidX(pair.viewRect), CGRectGetMidY(pair.viewRect));
+					CGContextRotateCTM(ctx, DegreesToRadians(rotate));
+					CGContextTranslateCTM(ctx, -CGRectGetMidX(pair.viewRect), -CGRectGetMidY(pair.viewRect));
+				}
+				CGContextAddRect(ctx, pair.viewRect);
+				CGContextDrawPath(ctx, kCGPathEOFillStroke);
+				CGContextRestoreGState(ctx);
+			}
+				break;
 
 			default:
 				NSAssert(NO, @"bad draw opcode!");
-				
 		}
 	}
 }
 
--(CGRect) enclosingViewRectangeForCanvasRect:(CGRect)canvas	// Given a canvas rect in view coordinates, return the shape's enclosing  rectangle, also in view coordinates. Canvas = the portion we wish to map.
+-(CGRect) enclosingViewRectangeForGeometry:(SMapCanvasGeometryDescriptor)geometry	// Given a canvas rect in view coordinates, return the shape's enclosing  rectangle, also in view coordinates. Canvas = the portion we wish to map.
 {
-	return CGRectMake(0, 0, 0, 0);
+	// find min and max vertices etc.
+	MinMax mm = MinMaxInit();
+	NSDictionary* d;
+	NSEnumerator* e = [mOps objectEnumerator];
+	
+	while (nil != (d = [e nextObject]))
+	{
+		// For right now, just look for points:
+		NSData* data = (NSData*) [d objectForKey:OPKEY_COORD];
+		ShapeOp op = (ShapeOp) [[d objectForKey:OPKEY_OP] intValue];
+		if (data)
+		{
+			GeoPoint p = Rotate([data geoPoint], geometry.rotationDegrees);
+			CGPoint cgP = [self convertToViewCoordinate:p usingGeometry:geometry];
+			mm = MinMaxForCGPoint(mm, cgP);
+			
+			CGRect anObjectRectangle = CGRectZero;
+			
+			// For unscaled objects (signs, labels etc.) we will like to compute their actual view rectangles:
+			if (op == ShapeSign)
+			{
+				UIImage* img = [Shape imageForSign:(ShapeSignType)[[d objectForKey:OPKEY_SIGN] intValue]];
+				CGSize sz = img.size;
+				anObjectRectangle = CGRectMake(cgP.x-(sz.width/2), cgP.y - (sz.height/2), sz.width, sz.height);
+			}
+			
+			if (op == ShapeRect)
+			{
+				SRectPair pair = [self _pairForRectOp:d andGeometry:&geometry];
+				anObjectRectangle = pair.viewRect;
+			}
+			
+			// If we have a bounds rectangle, then min/max it, as well.
+			if (!CGRectEqualToRect(anObjectRectangle, CGRectZero))
+			{
+				mm = MinMaxForCGRect(mm, anObjectRectangle);
+			}
+		}
+	}
+	
+	return CGRectFromMinMax(mm);
+}
+
+-(NSString*)description
+{
+	return [NSString stringWithFormat:@"Shape contains %d ops.", [mOps count]];
 }
 
 @end

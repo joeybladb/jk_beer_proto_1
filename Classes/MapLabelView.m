@@ -9,26 +9,27 @@
 #import "MapLabelView.h"
 #import "LocatableModelObject.h"
 #import <QuartzCore/CALayer.h>
+#import "UIColor+Components.h"
 
 @implementation MapLabelView
 
 
-- (id)initWithFrame:(CGRect)frame andObject:(LocatableModelObject*)object
+-(id)initWithFrame:(CGRect)frame andObject:(LocatableModelObject*)object withBottomNub:(BOOL)bottomNub andNubPosition:(CGFloat)nubPos
 {
-	// Oh, so you want that frame do you? Well screw you! I'm going to set the frame to whatever I damned well like. Cause I'm an EVIL view!
-	CGSize sz = [[object briefDescription] sizeWithFont:[UIFont systemFontOfSize:14]];
-	frame.size = CGSizeMake(sz.width + 32, 28);
-	
     if (self = [super initWithFrame:frame]) {
         // Initialization code
 		mObject = object;
+		mNubOnBottom = bottomNub;
+		mNubPosition = nubPos;
 		mNibItems = [[[NSBundle mainBundle] loadNibNamed:@"MapLabelView" owner:self options:nil] retain];
 		mLabelText.text = [object briefDescription];
 		self.opaque = NO;
-		frame.origin = CGPointMake(0,0);
-		mLabelView.frame = frame;
+//		frame.origin = bottomNub ? CGPointMake(0,0) : CGPointMake(0,8);
+		CGRect newFrame = mLabelView.frame;
+		newFrame.origin = bottomNub ? CGPointMake(0,0) : CGPointMake(0,8);	// Offset if we're drawing a top nub.
+		newFrame.size = CGSizeMake(frame.size.width, mLabelView.frame.size.height);
+		mLabelView.frame = newFrame;
 		[self addSubview:mLabelView];
-		
 
 		[mInfoButton addTarget:self action:@selector(onClick:) forControlEvents:UIControlEventTouchDown];
     }
@@ -37,6 +38,29 @@
 
 - (void)drawRect:(CGRect)rect {
     // Drawing code
+	CGContextRef ctx = UIGraphicsGetCurrentContext(); 
+	CGRect bounds = self.bounds;
+
+	// Convert NUB position to local coordinates:
+	CGPoint nubPoint = CGPointMake(mNubPosition, mNubPosition);
+	nubPoint = [self convertPoint:nubPoint fromView:self.superview];
+	CGFloat nubPos = nubPoint.x;
+	
+	if (mNubOnBottom)
+	{
+		// Draw the nub.
+		CGContextMoveToPoint(ctx, nubPos, bounds.origin.y + bounds.size.height);
+		CGContextAddLineToPoint(ctx, nubPos - 10, (bounds.origin.y + bounds.size.height) - 10);
+		CGContextAddLineToPoint(ctx, nubPos + 10, (bounds.origin.y + bounds.size.height) - 10);
+		CGContextAddLineToPoint(ctx, nubPos, bounds.origin.y + bounds.size.height);
+		CGContextSetFillColor(ctx, [[UIColor colorWithWhite:0.0 alpha:1.0] components]);
+		CGContextFillPath(ctx);
+		CGContextStrokePath(ctx);
+	}
+	else
+	{
+		
+	}
 }
 
 

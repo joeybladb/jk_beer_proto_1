@@ -8,13 +8,24 @@
 
 #import "MapController.h"
 #import "MapView.h"
-#import "MapObject.h"
+#import "LocatableObjectView.h"
 #import "MapLabelView.h"
 #import "BeerController.h"
 #import "Shape.h"
 #import "UIColor+Components.h"
+#import "LocatableModelObject.h"
+#import "FestivalDatabase.h"
+
+MapController* sActiveController = nil;
 
 @implementation MapController
+
+@synthesize geometry=mGeometry;
+
++(MapController*)activeMapController
+{
+	return sActiveController;
+}
 
 /*
 // The designated initializer. Override to perform setup that is required before the view is loaded.
@@ -33,24 +44,23 @@
 */
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
+- (void)viewDidLoad 
+{
+	sActiveController = self;
     [super viewDidLoad];
-	[self initFestivalGrounds];
 
 #define CANVAS_INSET 10.0
-#define START_WIDTH 300
-	
-	// Calculate the map view rect and the "canvas" rect. The map objects will live and draw within the "canvas" rect.
-	// First pass, assume y > x
-	CGRect bounds = [mFestivalGrounds enclosingRectangleShouldFlip:YES rotatingByAngle:(double)0.0];	// This is the rect enclosing the entire festival.
-	mOriginalMapFrame = CGRectMake(0, 0, START_WIDTH + CANVAS_INSET * 2.0, START_WIDTH * (bounds.size.height / bounds.size.width) + CANVAS_INSET * 2.0);
-	CGRect canvasRect = CGRectInset(mOriginalMapFrame, CANVAS_INSET, CANVAS_INSET);
+#define START_WIDTH 320
+#define ROTATE_CANVAS_DEGREES -0.0
+
+	// Build the geometry -- this specifies an extra layer of conversion that happens between geo-coordinates in the locatable model shapes and actual view coordinates.
+	mGeometry = [Shape geoDescriptorForFestival:[FestivalDatabase sharedDatabase] constrainedToWidth:START_WIDTH insettingViewBy:CANVAS_INSET rotatingByAngle:ROTATE_CANVAS_DEGREES];
 	
 	// Build the map view:
-	mMapView = [[MapView alloc] initWithFrame:mOriginalMapFrame andCanvasRect:canvasRect];	// Mapview will automatically populate itself with subviews corresponding to locatable objects in the database.
+	mMapView = [[MapView alloc] initWithGeometry:mGeometry];	// Mapview will automatically populate itself with subviews corresponding to locatable objects in the database.
 	mMapView.backgroundColor = [UIColor colorWithRed:.95 green:.95 blue:.81 alpha:1.0];
 	[(MapView*)mMapView setController:self];
-	[(MapView*)mMapView setBackgroundShape:mFestivalGrounds];
+
 	CGAffineTransform tx = mMapView.transform;
 	mMapView.transform = tx;
 
@@ -62,7 +72,7 @@
 	mScroller.delegate = self;
     [mScroller addSubview:mMapView];
 	
-	[self scrollViewDidEndZooming:mScroller withView:mMapView atScale:1.0];
+//	[self scrollViewDidEndZooming:mScroller withView:mMapView atScale:1.0];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -93,10 +103,19 @@
 	
 	// Set up a new canvas rect, which is inset slightly from the (newly scaled) map frame. We use this during drawing to actually truly scale our GeoCoordinates to fit.
 	CGRect newCanvasRect = CGRectInset(mMapView.frame, CANVAS_INSET * scale, CANVAS_INSET * scale);
-	mMapView.canvasRect = newCanvasRect;
+	mGeometry.canvasRect = newCanvasRect;
 
 	// Set the actual scale
 	mMapView.scale = scale;
+	
+	// Notify our subviews of the change:
+//	NSEnumerator* e = [mMapView.subviews objectEnumerator];
+//	UIView* v;
+//	while (nil != (v = [e nextObject]))
+//	{
+//		if ([v respondsToSelector:@selector(resizeTo:withScale:)])
+//			[(LocatableObjectView*) v resizeTo:mGeometry withScale:scale];
+//	}
 	
 	// And redraw.
 	[mMapView setNeedsDisplay];
@@ -122,7 +141,7 @@
     [super dealloc];
 }
 
--(void)objectClicked:(MapObject*)object
+-(void)objectClicked:(LocatableObjectView*)mapObject
 {
 	if (mLabel)
 	{
@@ -130,10 +149,49 @@
 		[mLabel autorelease];
 		mLabel = nil;
 	}
-	CGRect f = object.frame;
-	mLabel = [[MapLabelView alloc] initWithFrame:CGRectMake(MAX(2.0, f.origin.x - 20), f.origin.y - 34, 300, 28) andObject:[object modelObject]];
-	[mMapView addSubview:mLabel];
-	[mLabel setClickTarget:self andSelector:@selector(mapClickInfoForObject:)];
+	
+	if (mapObject)
+	{
+#define NUB_HEIGHT 8	
+#define VIEW_FROM_NIB_HEIGHT 32
+#define HORIZONTAL_OFFSET 20
+#define VERTICAL_OFFSET NUB_HEIGHT+VIEW_FROM_NIB_HEIGHT-4
+#define HORIZONTAL_SPACING 32
+		
+		LocatableModelObject* modelObject = mapObject.modelObject;
+		CGRect locatableFrame = mapObject.frame;
+		CGSize sz = [[modelObject briefDescription] sizeWithFont:[UIFont systemFontOfSize:14]];
+		CGRect labelFrame = CGRectMake(MAX(2.0, locatableFrame.origin.x - HORIZONTAL_OFFSET), locatableFrame.origin.y - VIEW_FROM_NIB_HEIGHT, sz.width + HORIZONTAL_SPACING, VIEW_FROM_NIB_HEIGHT + NUB_HEIGHT);
+		
+		// Make sure that labelFrame fits within the entire map's bounds. TODO It might be a good thing then to also scroll the entire label into view.
+		BOOL arrowNubOnBottom = YES;	// The arrow nub is a triangle shaped thing on a label view which points at the object. It's either on the bottom or the top.
+		CGRect mapFrame = mMapView.frame;
+		
+		// First figure out right edge:
+		CGFloat mapRightEdgeExtent = mapFrame.origin.x + mapFrame.size.width, labelRightEdge = labelFrame.origin.x + labelFrame.size.width;
+		if (labelRightEdge > mapRightEdgeExtent)
+		{	// If the label is sticking off the right edge, then shift it to the left 
+			labelFrame.origin.x -= labelRightEdge - mapRightEdgeExtent;
+		}
+		
+		// If we're off the left edge, shift to the right.
+		if (labelFrame.origin.x < mapFrame.origin.x)
+			labelFrame.origin.x;
+		
+		// Todo: if the label width is too big, then trim it to fit.
+		
+		// Now make sure we haven't gone off the top:
+		if (labelFrame.origin.y < mapFrame.origin.y)
+		{	// Place the label UNDER the object, with the arrow nub pointing up.
+			labelFrame.origin.y = locatableFrame.origin.y + locatableFrame.size.height + 16;
+			arrowNubOnBottom = NO;
+		}
+
+		mLabel = [[MapLabelView alloc] initWithFrame:labelFrame andObject:modelObject withBottomNub:arrowNubOnBottom andNubPosition:mapObject.center.x];
+//		mLabel = [[MapLabelView alloc] initWithFrame:labelFrame andObject:modelObject withSuperviewBounds:mMapView.frame];
+		[mMapView addSubview:mLabel];
+		[mLabel setClickTarget:self andSelector:@selector(mapClickInfoForObject:)];
+	}
 }
 
 -(void)mapClickInfoForObject:(LocatableModelObject*)obj;

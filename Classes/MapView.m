@@ -7,23 +7,24 @@
 //
 
 #import "MapView.h"
-#import "MapObject.h"
+#import "LocatableModelObject.h"
+#import "LocatableObjectView.h"
 #import "FestivalDatabase.h"
-
+#import "ExpandingCircle.h"
+#import <QuartzCore/QuartzCore.h>
 
 @implementation MapView
 
-@synthesize canvasRect=mCanvasRect;
 @synthesize scale=mScale;
+
++ (Class)layerClass                        // default is [CALayer class]. Used when creating the underlying layer for the view.
+{
+	return [CATiledLayer class];
+}
 
 -(MapController*)controller
 {
 	return mController;
-}
-
--(void)setBackgroundShape:(Shape*)s
-{
-	mBackgroundShape = [s retain];
 }
 
 -(void)setController:(MapController*)controller
@@ -31,17 +32,17 @@
 	mController = controller;
 }
 
-- (id)initWithFrame:(CGRect)frame andCanvasRect:(CGRect)canvas {
-    if (self = [super initWithFrame:frame]) {
+-(id) initWithGeometry:(SMapCanvasGeometryDescriptor)geo
+{
+    if (self = [super initWithFrame:geo.viewFrame]) {
         // Initialization code
 		mScale = 1.0;
-		mCanvasRect = canvas;
 		// Populate the map with map objects
-		NSArray* locs = [[FestivalDatabase sharedDatabase] locatables];
-		LocatableModelObject* l;
-		NSEnumerator* e = [locs objectEnumerator];
-		while (nil != (l = [e nextObject]))
-			[[MapObject alloc]intiWithObject:l forMapView:self];	// This will create and insert new map objects.
+//		NSArray* locs = [[FestivalDatabase sharedDatabase] locatables];
+//		LocatableModelObject* l;
+//		NSEnumerator* e = [locs objectEnumerator];
+//		while (nil != (l = [e nextObject]))
+//			[[LocatableObjectView alloc]intiWithObject:l forMapView:self];	// This will create and insert new map objects.
     }
     return self;
 }
@@ -49,12 +50,31 @@
 
 - (void)drawRect:(CGRect)rect 
 {
-    CGContextRef ctx = UIGraphicsGetCurrentContext(); 
-	[mBackgroundShape renderInContext:ctx withViewFrame:self.canvasRect andScale:self.scale];
+	SMapCanvasGeometryDescriptor geo = [[MapController activeMapController] geometry];
+	geo.localViewFrame = CGRectZero;
+
+	CGFloat xTran = CGRectGetMidX(self.bounds), yTran = CGRectGetMidY(self.bounds);
+	CGContextRef ctx = UIGraphicsGetCurrentContext();
+	CGContextSaveGState(ctx);
+
+	CGContextTranslateCTM(ctx, xTran, yTran);
+	CGContextRotateCTM(ctx, DegreesToRadians(geo.rotationDegrees));
+	CGContextTranslateCTM(ctx, -xTran, -yTran);
+
+	NSArray* locs = [[FestivalDatabase sharedDatabase] locatables];
+	LocatableModelObject* l;
+	NSEnumerator* e = [locs objectEnumerator];
+	while (nil != (l = [e nextObject]))
+	{
+		[[l shape] renderInContext:ctx withGeometry:geo andScale:mScale];
+	}
+	
+	CGContextRestoreGState(ctx);
 }
 
 
-- (void)dealloc {
+- (void)dealloc 
+{
     [super dealloc];
 }
 
@@ -66,6 +86,21 @@
 - (void)setTransform:(CGAffineTransform)newValue;
 {
     [super setTransform:CGAffineTransformScale(newValue, 1.0f / mScale, 1.0f / mScale)];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch* touch = [touches anyObject];
+    NSUInteger numTaps = [touch tapCount];
+    if (numTaps < 2) 
+	{
+		CGPoint l = [touch locationInView:self];
+		CGRect r = CGRectMake(l.x - 2, l.y - 2, 2, 2);
+		ExpandingCircle* ep = [[[ExpandingCircle alloc] initWithFrame:r] autorelease];
+		[self addSubview:ep];
+		[ep	expandToNothing];
+	} 
+	else	// TODO: implement double-click zoom in on spot.
+		[self.nextResponder touchesBegan:touches withEvent:event];
 }
 
 @end

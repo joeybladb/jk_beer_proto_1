@@ -11,37 +11,26 @@
 
 @implementation LocatableModelObject
 
+@synthesize name=mName;
+
 -(id)initWithAttributes:(NSDictionary*)attrs	// In the future, we'll get some kind of JSON document, and we'll parse out a sub-section into a dictionary which inits the object.
 {
 	self = [super init];
 	if (self)
 	{
-		mImageName = nil;
+		mName = nil;
 		mShape = nil;
  		mInteractsWithUser = NO;
 	}
 	return self;
 }
 
--(id)initWithImageName:(NSString*)name atLocation:(CGPoint)point interactingWithUser:(BOOL)interacting
+-(id)initWithShapeDatabase:(Shape*)shape interactingWithUser:(BOOL)interacting named:(NSString*)name
 {
 	self = [super init];
 	if (self)
 	{
-		mImageName = [name retain];
-		mImageLocation = point;
-		mShape = nil;
-		mInteractsWithUser = interacting;
-	}
-	return self;
-}
-
--(id)initWithShapeDatabase:(Shape*)shape interactingWithUser:(BOOL)interacting
-{
-	self = [super init];
-	if (self)
-	{
-		mImageName = nil;
+		mName = [name retain];
 		mShape = [shape retain];
 		mInteractsWithUser = interacting;
 	}
@@ -50,7 +39,7 @@
 
 -(void)dealloc
 {
-	[mImageName autorelease];
+	[mName autorelease];
 	[mShape autorelease];
 	[super dealloc];
 }
@@ -62,16 +51,6 @@
 -(Shape*)shape	// May be NULL
 {
 	return mShape;
-}
-
--(NSString*) imageName
-{
-	return mImageName;
-}
-
--(CGPoint) imageLocation
-{
-	return mImageLocation;
 }
 
 -(BOOL)interactsWithUser

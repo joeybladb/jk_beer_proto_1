@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Shape.h"
 
-@class MapObject;
+@class LocatableObjectView;
 @class MapView;
 @class MapLabelView;
-@class Shape;
 
 
 @interface MapController : UIViewController <UIScrollViewDelegate> {
@@ -19,10 +19,14 @@
 	IBOutlet UIScrollView* mScroller;
 	MapLabelView* mLabel;
 	Shape* mFestivalGrounds;
-	CGRect mOriginalMapFrame;
+//	CGRect mOriginalMapFrame;
+	SMapCanvasGeometryDescriptor mGeometry;
 }
 
--(void)objectClicked:(MapObject*)object;
++(MapController*)activeMapController;
+@property SMapCanvasGeometryDescriptor geometry;
+
+-(void)objectClicked:(LocatableObjectView*)object;
 
 @end
 

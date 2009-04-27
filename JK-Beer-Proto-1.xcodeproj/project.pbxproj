@@ -15,6 +15,7 @@
 		2899E5600DE3E45000AC0155 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E55F0DE3E45000AC0155 /* RootViewController.xib */; };
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
+		C411A0FE0FA554D400A357AA /* ExpandingCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = C411A0FD0FA554D400A357AA /* ExpandingCircle.m */; };
 		C4148B130F7FFC7400838088 /* ListController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148B120F7FFC7400838088 /* ListController.m */; };
 		C4148B150F7FFCFF00838088 /* ListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4148B140F7FFCFF00838088 /* ListController.xib */; };
 		C4148B2D0F80000400838088 /* MapController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148B2C0F80000400838088 /* MapController.m */; };
@@ -22,7 +23,7 @@
 		C4148B530F80081A00838088 /* BeerController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148B520F80081A00838088 /* BeerController.m */; };
 		C4148B790F8009C200838088 /* BeerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4148B780F8009C200838088 /* BeerController.xib */; };
 		C4148C3E0F85858700838088 /* MapView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148C3D0F85858700838088 /* MapView.m */; };
-		C4148C9E0F88012D00838088 /* MapObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148C9D0F88012D00838088 /* MapObject.m */; };
+		C4148C9E0F88012D00838088 /* LocatableObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148C9D0F88012D00838088 /* LocatableObjectView.m */; };
 		C4148D0C0F880A7800838088 /* FestivalDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148D0B0F880A7800838088 /* FestivalDatabase.m */; };
 		C4148D0F0F880BBB00838088 /* LocatableModelObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148D0E0F880BBB00838088 /* LocatableModelObject.m */; };
 		C4148D120F880C0200838088 /* Shape.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148D110F880C0200838088 /* Shape.m */; };
@@ -51,6 +52,10 @@
 		C4148EBF0F88249600838088 /* MapLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148EBE0F88249600838088 /* MapLabelView.m */; };
 		C4148EC10F8824DF00838088 /* MapLabelView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4148EC00F8824DF00838088 /* MapLabelView.xib */; };
 		C414901F0F8868AD00838088 /* UIColor+Components.m in Sources */ = {isa = PBXBuildFile; fileRef = C414901E0F8868AD00838088 /* UIColor+Components.m */; };
+		C474B26E0FA396550086B49D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C474B26D0FA396550086B49D /* QuartzCore.framework */; };
+		C474B2FE0FA41C050086B49D /* ngiutm.c in Sources */ = {isa = PBXBuildFile; fileRef = C474B2F60FA41C050086B49D /* ngiutm.c */; };
+		C474B2FF0FA41C050086B49D /* tranmerc.c in Sources */ = {isa = PBXBuildFile; fileRef = C474B2F90FA41C050086B49D /* tranmerc.c */; };
+		C474B3000FA41C050086B49D /* utm.c in Sources */ = {isa = PBXBuildFile; fileRef = C474B2FC0FA41C050086B49D /* utm.c */; };
 		C4C024EB0F925CE9007E5B3B /* MapControllerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C4C024EA0F925CE9007E5B3B /* MapControllerAdditions.m */; };
 /* End PBXBuildFile section */
 
@@ -68,6 +73,8 @@
 		28C286E00D94DF7D0034E888 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C411A0FC0FA554D400A357AA /* ExpandingCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpandingCircle.h; sourceTree = "<group>"; };
+		C411A0FD0FA554D400A357AA /* ExpandingCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpandingCircle.m; sourceTree = "<group>"; };
 		C4148B110F7FFC7400838088 /* ListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListController.h; sourceTree = "<group>"; };
 		C4148B120F7FFC7400838088 /* ListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListController.m; sourceTree = "<group>"; };
 		C4148B140F7FFCFF00838088 /* ListController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ListController.xib; sourceTree = "<group>"; };
@@ -79,8 +86,8 @@
 		C4148B780F8009C200838088 /* BeerController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BeerController.xib; sourceTree = "<group>"; };
 		C4148C3C0F85858700838088 /* MapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView.h; sourceTree = "<group>"; };
 		C4148C3D0F85858700838088 /* MapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapView.m; sourceTree = "<group>"; };
-		C4148C9C0F88012D00838088 /* MapObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapObject.h; sourceTree = "<group>"; };
-		C4148C9D0F88012D00838088 /* MapObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapObject.m; sourceTree = "<group>"; };
+		C4148C9C0F88012D00838088 /* LocatableObjectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocatableObjectView.h; sourceTree = "<group>"; };
+		C4148C9D0F88012D00838088 /* LocatableObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocatableObjectView.m; sourceTree = "<group>"; };
 		C4148D0A0F880A7800838088 /* FestivalDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FestivalDatabase.h; sourceTree = "<group>"; };
 		C4148D0B0F880A7800838088 /* FestivalDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FestivalDatabase.m; sourceTree = "<group>"; };
 		C4148D0D0F880BBB00838088 /* LocatableModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocatableModelObject.h; sourceTree = "<group>"; };
@@ -114,6 +121,14 @@
 		C4148EC00F8824DF00838088 /* MapLabelView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapLabelView.xib; sourceTree = "<group>"; };
 		C414901D0F8868AD00838088 /* UIColor+Components.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Components.h"; sourceTree = "<group>"; };
 		C414901E0F8868AD00838088 /* UIColor+Components.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Components.m"; sourceTree = "<group>"; };
+		C474B26D0FA396550086B49D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
+		C474B2F60FA41C050086B49D /* ngiutm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ngiutm.c; sourceTree = "<group>"; };
+		C474B2F70FA41C050086B49D /* ngiutm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ngiutm.h; sourceTree = "<group>"; };
+		C474B2F90FA41C050086B49D /* tranmerc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tranmerc.c; sourceTree = "<group>"; };
+		C474B2FA0FA41C050086B49D /* tranmerc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tranmerc.h; sourceTree = "<group>"; };
+		C474B2FC0FA41C050086B49D /* utm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = utm.c; sourceTree = "<group>"; };
+		C474B2FD0FA41C050086B49D /* utm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utm.h; sourceTree = "<group>"; };
+		C474B3780FA42F2A0086B49D /* MinMax.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinMax.h; sourceTree = "<group>"; };
 		C4C024EA0F925CE9007E5B3B /* MapControllerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapControllerAdditions.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -125,6 +140,7 @@
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
+				C474B26E0FA396550086B49D /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -169,7 +185,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				C4148EC00F8824DF00838088 /* MapLabelView.xib */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -191,6 +206,7 @@
 				C4148B140F7FFCFF00838088 /* ListController.xib */,
 				C4148B2E0F80006A00838088 /* MapController.xib */,
 				C4148B780F8009C200838088 /* BeerController.xib */,
+				C4148EC00F8824DF00838088 /* MapLabelView.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				C4148D940F881A1200838088 /* imgs */,
 			);
@@ -200,6 +216,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C474B26D0FA396550086B49D /* QuartzCore.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */,
@@ -236,6 +253,36 @@
 			path = imgs;
 			sourceTree = "<group>";
 		};
+		C474B2F50FA41C050086B49D /* UTM */ = {
+			isa = PBXGroup;
+			children = (
+				C474B2F60FA41C050086B49D /* ngiutm.c */,
+				C474B2F70FA41C050086B49D /* ngiutm.h */,
+				C474B2F80FA41C050086B49D /* tranmerc */,
+				C474B2FB0FA41C050086B49D /* utm */,
+			);
+			name = UTM;
+			path = utm;
+			sourceTree = SOURCE_ROOT;
+		};
+		C474B2F80FA41C050086B49D /* tranmerc */ = {
+			isa = PBXGroup;
+			children = (
+				C474B2F90FA41C050086B49D /* tranmerc.c */,
+				C474B2FA0FA41C050086B49D /* tranmerc.h */,
+			);
+			path = tranmerc;
+			sourceTree = "<group>";
+		};
+		C474B2FB0FA41C050086B49D /* utm */ = {
+			isa = PBXGroup;
+			children = (
+				C474B2FC0FA41C050086B49D /* utm.c */,
+				C474B2FD0FA41C050086B49D /* utm.h */,
+			);
+			path = utm;
+			sourceTree = "<group>";
+		};
 		C4A168870F91E756002C37D7 /* Map */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,8 +295,12 @@
 				C4148EBE0F88249600838088 /* MapLabelView.m */,
 				C4148D100F880C0200838088 /* Shape.h */,
 				C4148D110F880C0200838088 /* Shape.m */,
-				C4148C9C0F88012D00838088 /* MapObject.h */,
-				C4148C9D0F88012D00838088 /* MapObject.m */,
+				C4148C9C0F88012D00838088 /* LocatableObjectView.h */,
+				C4148C9D0F88012D00838088 /* LocatableObjectView.m */,
+				C474B3780FA42F2A0086B49D /* MinMax.h */,
+				C411A0FC0FA554D400A357AA /* ExpandingCircle.h */,
+				C411A0FD0FA554D400A357AA /* ExpandingCircle.m */,
+				C474B2F50FA41C050086B49D /* UTM */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -348,13 +399,17 @@
 				C4148B2D0F80000400838088 /* MapController.m in Sources */,
 				C4148B530F80081A00838088 /* BeerController.m in Sources */,
 				C4148C3E0F85858700838088 /* MapView.m in Sources */,
-				C4148C9E0F88012D00838088 /* MapObject.m in Sources */,
+				C4148C9E0F88012D00838088 /* LocatableObjectView.m in Sources */,
 				C4148D0C0F880A7800838088 /* FestivalDatabase.m in Sources */,
 				C4148D0F0F880BBB00838088 /* LocatableModelObject.m in Sources */,
 				C4148D120F880C0200838088 /* Shape.m in Sources */,
 				C4148EBF0F88249600838088 /* MapLabelView.m in Sources */,
 				C414901F0F8868AD00838088 /* UIColor+Components.m in Sources */,
 				C4C024EB0F925CE9007E5B3B /* MapControllerAdditions.m in Sources */,
+				C474B2FE0FA41C050086B49D /* ngiutm.c in Sources */,
+				C474B2FF0FA41C050086B49D /* tranmerc.c in Sources */,
+				C474B3000FA41C050086B49D /* utm.c in Sources */,
+				C411A0FE0FA554D400A357AA /* ExpandingCircle.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

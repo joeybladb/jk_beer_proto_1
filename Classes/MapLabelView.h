@@ -14,12 +14,15 @@
 	IBOutlet UILabel*	mLabelText;
 	IBOutlet UIButton*	mInfoButton;
 	
+	BOOL				mNubOnBottom;
+	CGFloat				mNubPosition;	// x position, relative to superview bounds.
+	
 	id mNibItems;
 	LocatableModelObject* mObject;
 	id	mClickTarget;
 	SEL mClickSelector;
 }
--(id)initWithFrame:(CGRect)frame andObject:(LocatableModelObject*)object;
+-(id)initWithFrame:(CGRect)frame andObject:(LocatableModelObject*)object withBottomNub:(BOOL)bottomNub andNubPosition:(CGFloat)nubPos;
 -(void)setClickTarget:(id)target andSelector:(SEL)selector;
 
 -(void)onClick:(id)sender;

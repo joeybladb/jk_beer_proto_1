@@ -10,22 +10,19 @@
 #import "Shape.h"
 
 @interface LocatableModelObject : NSObject {
-	NSString* mImageName;
-	CGPoint	mImageLocation;
+	NSString* mName;
 	Shape* mShape;
 	BOOL mInteractsWithUser;
 }
 
 -(id)initWithAttributes:(NSDictionary*)attrs;	// In the future, we'll get some kind of JSON document, and we'll parse out a sub-section into a dictionary which inits the object.
--(id)initWithImageName:(NSString*)name atLocation:(CGPoint)point interactingWithUser:(BOOL)interacting;
--(id)initWithShapeDatabase:(Shape*)shape interactingWithUser:(BOOL)interacting;
+-(id)initWithShapeDatabase:(Shape*)shape interactingWithUser:(BOOL)interacting named:(NSString*)name;
 
 //
 // Getters
 //
-@property (readonly) Shape* shape;
-@property (readonly) NSString* imageName;
-@property (readonly) CGPoint imageLocation;
+@property (readonly,retain) Shape* shape;
+@property (readonly,retain) NSString* name;
 
 -(NSString*)briefDescription;
 

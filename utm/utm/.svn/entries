@@ -1,0 +1,52 @@
+8
+
+dir
+4898
+https://repository.vernier.com:23845/repos/trunk/vernier/sources/ngi_app/src/gps/utm
+https://repository.vernier.com:23845/repos
+
+
+
+2008-08-25T16:41:12.413005Z
+4682
+bre
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+37671d33-5a16-0410-807e-c55260944247
+
+utm.c
+file
+
+
+
+
+2008-10-27T16:08:09.000000Z
+433c8109172f60b2cc2f000d61462a6c
+2008-08-25T16:41:12.413005Z
+4682
+bre
+
+utm.h
+file
+
+
+
+
+2008-10-27T16:08:09.000000Z
+c9fa2e3390d4b5b25491b5bca88738b4
+2008-08-25T16:41:12.413005Z
+4682
+bre
+
