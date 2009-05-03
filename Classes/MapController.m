@@ -15,8 +15,14 @@
 #import "UIColor+Components.h"
 #import "LocatableModelObject.h"
 #import "FestivalDatabase.h"
+#import "LatLongViewController.h"
+#import "MeView.h"
+#import "ExpandingCircle.h"
+
 
 MapController* sActiveController = nil;
+SMapCanvasGeometryDescriptor sGeometry;
+BOOL sGeoIsSet = NO;
 
 @implementation MapController
 
@@ -67,17 +73,21 @@ MapController* sActiveController = nil;
 	// Put the map view IN the scroller, fix up the settings on the scroller.
 	mScroller.contentSize = CGSizeMake(mMapView.frame.size.width, mMapView.frame.size.height);
 	mScroller.maximumZoomScale = 6.0;
-	mScroller.minimumZoomScale = 1.0;
+	mScroller.minimumZoomScale = 0.75;
 	mScroller.clipsToBounds = YES;
 	mScroller.delegate = self;
     [mScroller addSubview:mMapView];
 	
-//	[self scrollViewDidEndZooming:mScroller withView:mMapView atScale:1.0];
+	mMyLocationView = nil;
+	[super viewDidLoad];
+	mLocator = [[CLLocationManager alloc] init];
+	mLocator.delegate = self;
+	[mLocator startUpdatingLocation];
+
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//	NSLog(@"Content offset = %@", NSStringFromCGPoint(scrollView.contentOffset));
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView     // return a view that will be scaled. if delegate returns nil, nothing happens
@@ -104,6 +114,8 @@ MapController* sActiveController = nil;
 	// Set up a new canvas rect, which is inset slightly from the (newly scaled) map frame. We use this during drawing to actually truly scale our GeoCoordinates to fit.
 	CGRect newCanvasRect = CGRectInset(mMapView.frame, CANVAS_INSET * scale, CANVAS_INSET * scale);
 	mGeometry.canvasRect = newCanvasRect;
+	mGeometry.viewFrame = mMapView.frame;
+	mGeometry.modTime = CFAbsoluteTimeGetCurrent();
 
 	// Set the actual scale
 	mMapView.scale = scale;
@@ -141,7 +153,7 @@ MapController* sActiveController = nil;
     [super dealloc];
 }
 
--(void)objectClicked:(LocatableObjectView*)mapObject
+-(void)objectClicked:(LocatableModelObject*)locatable
 {
 	if (mLabel)
 	{
@@ -150,7 +162,7 @@ MapController* sActiveController = nil;
 		mLabel = nil;
 	}
 	
-	if (mapObject)
+	if (locatable)
 	{
 #define NUB_HEIGHT 8	
 #define VIEW_FROM_NIB_HEIGHT 32
@@ -158,9 +170,9 @@ MapController* sActiveController = nil;
 #define VERTICAL_OFFSET NUB_HEIGHT+VIEW_FROM_NIB_HEIGHT-4
 #define HORIZONTAL_SPACING 32
 		
-		LocatableModelObject* modelObject = mapObject.modelObject;
-		CGRect locatableFrame = mapObject.frame;
-		CGSize sz = [[modelObject briefDescription] sizeWithFont:[UIFont systemFontOfSize:14]];
+		Shape* theShape = locatable.shape;
+		CGRect locatableFrame = [theShape enclosingViewRectangeForGeometry:mGeometry];
+		CGSize sz = [[locatable briefDescription] sizeWithFont:[UIFont systemFontOfSize:14]];
 		CGRect labelFrame = CGRectMake(MAX(2.0, locatableFrame.origin.x - HORIZONTAL_OFFSET), locatableFrame.origin.y - VIEW_FROM_NIB_HEIGHT, sz.width + HORIZONTAL_SPACING, VIEW_FROM_NIB_HEIGHT + NUB_HEIGHT);
 		
 		// Make sure that labelFrame fits within the entire map's bounds. TODO It might be a good thing then to also scroll the entire label into view.
@@ -187,8 +199,7 @@ MapController* sActiveController = nil;
 			arrowNubOnBottom = NO;
 		}
 
-		mLabel = [[MapLabelView alloc] initWithFrame:labelFrame andObject:modelObject withBottomNub:arrowNubOnBottom andNubPosition:mapObject.center.x];
-//		mLabel = [[MapLabelView alloc] initWithFrame:labelFrame andObject:modelObject withSuperviewBounds:mMapView.frame];
+		mLabel = [[MapLabelView alloc] initWithFrame:labelFrame andObject:locatable withBottomNub:arrowNubOnBottom andNubPosition:CGRectGetMidX(locatableFrame)];
 		[mMapView addSubview:mLabel];
 		[mLabel setClickTarget:self andSelector:@selector(mapClickInfoForObject:)];
 	}
@@ -201,6 +212,60 @@ MapController* sActiveController = nil;
 	[anotherViewController setBeerNum:666];
 	[self.navigationController pushViewController:anotherViewController animated:YES];
 	[anotherViewController release];	
+}
+
+- (void)locationManager:(CLLocationManager *)manager
+	didUpdateToLocation:(CLLocation *)newLocation
+		   fromLocation:(CLLocation *)oldLocation
+{
+	if (mMyLocationView	== nil)
+	{
+		mMyLocationView = [[MeView alloc] initWithFrame:CGRectMake(0,0,8,8)];
+		[mMapView addSubview:mMyLocationView];
+		NSLog(@"New Thingy!");
+	}
+	// Get geo point from thingy
+	CGFloat xOffset = CGRectGetMidX(mGeometry.geoBounds) - gLong;
+	CGFloat yOffset = CGRectGetMidY(mGeometry.geoBounds) - gLat;
+
+	GeoPoint gp = GPMAKE(newLocation.coordinate.longitude + xOffset, newLocation.coordinate.latitude + yOffset);
+	
+	// Create temp shape, and convert geo to view coord:
+	Shape* tempShape = [[[Shape alloc] init] autorelease];
+	CGPoint theCenter = [tempShape convertToViewCoordinate:gp usingGeometry:self.geometry];
+	
+	// Using the horizontal accuracy, re-size the view:
+	CGFloat horizAccuracy = newLocation.horizontalAccuracy / 2;
+	UTMPoint utmTopLeftPt = ConvertGeoToUTMPoint(gp), utmBottomRight = utmTopLeftPt;
+	utmTopLeftPt.e -= horizAccuracy;
+	utmTopLeftPt.n += horizAccuracy;
+	utmBottomRight.e += horizAccuracy;
+	utmBottomRight.n -= horizAccuracy;
+	CGPoint viewTopLeft = [tempShape convertToViewCoordinate:ConvertUTMToGeoPoint(utmTopLeftPt) usingGeometry:mGeometry];
+	CGPoint viewBotRight = [tempShape convertToViewCoordinate:ConvertUTMToGeoPoint(utmBottomRight) usingGeometry:mGeometry];
+	CGRect myNewFrame = mMyLocationView.frame;
+	myNewFrame.size.width = viewBotRight.y - viewTopLeft.y;
+	myNewFrame.size.height = viewBotRight.y - viewTopLeft.y;
+	
+	// Now set up the view's new center / size, w/ a linear animation.
+	[UIView beginAnimations:@"MovingMe" context:self];
+	[UIView setAnimationCurve:UIViewAnimationCurveLinear];
+	[UIView setAnimationDuration:0.2];
+	mMyLocationView.frame = myNewFrame;	// TODO: UIScrollView zooming will screw up our frame/bounds. MapController will need to fix us up. Also, it should remove all subviews views which are not in the display for better efficiency.
+	mMyLocationView.center = theCenter;
+	[UIView commitAnimations];
+}
+
+/*
+ *  locationManager:didFailWithError:
+ *  
+ *  Discussion:
+ *    Invoked when an error has occurred.
+ */
+- (void)locationManager:(CLLocationManager *)manager
+	   didFailWithError:(NSError *)error
+{
+	NSLog(@"Awww shit! Fuck! MapController -- Location Manager error: %@", error);
 }
 
 

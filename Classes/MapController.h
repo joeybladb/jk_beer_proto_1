@@ -8,25 +8,27 @@
 
 #import <UIKit/UIKit.h>
 #import "Shape.h"
+#import <CoreLocation/CoreLocation.h>
 
 @class LocatableObjectView;
 @class MapView;
 @class MapLabelView;
+@class LocatableModelObject;
 
-
-@interface MapController : UIViewController <UIScrollViewDelegate> {
+@interface MapController : UIViewController <UIScrollViewDelegate,CLLocationManagerDelegate> {
 	IBOutlet MapView* mMapView;
 	IBOutlet UIScrollView* mScroller;
 	MapLabelView* mLabel;
 	Shape* mFestivalGrounds;
-//	CGRect mOriginalMapFrame;
 	SMapCanvasGeometryDescriptor mGeometry;
+	UIView* mMyLocationView;
+	CLLocationManager* mLocator;
 }
 
 +(MapController*)activeMapController;
 @property SMapCanvasGeometryDescriptor geometry;
 
--(void)objectClicked:(LocatableObjectView*)object;
+-(void)objectClicked:(LocatableModelObject*)locatable;
 
 @end
 

@@ -28,7 +28,7 @@
 	CGContextRef ctx = UIGraphicsGetCurrentContext();
 	CGContextSetFillColor(ctx, [[UIColor colorWithRed:0.0 green:0.2 blue:1.0 alpha:0.5] components]);
 	CGContextSetStrokeColor(ctx, [[UIColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:1.0] components]);
-	CGContextSetLineWidth(ctx, 8.0);
+	CGContextSetLineWidth(ctx, 4.0);
 	CGContextFillEllipseInRect(ctx, b);
 	CGContextStrokeEllipseInRect(ctx, b);
 }
@@ -38,11 +38,15 @@
     [super dealloc];
 }
 
--(void)expandToNothing
+-(void)expandToNothing:(CGFloat)maxRadius;
 {
 #define EXPAND_VALUE 80
+	
+	if (maxRadius < EXPAND_VALUE)
+		maxRadius = EXPAND_VALUE;
+	
 	CGPoint p = self.center;
-	CGRect newFrame = CGRectMake(p.x - EXPAND_VALUE, p.y - EXPAND_VALUE, EXPAND_VALUE * 2, EXPAND_VALUE * 2);
+	CGRect newFrame = CGRectMake(p.x - maxRadius, p.y - maxRadius, maxRadius * 2, maxRadius * 2);
 	[UIView beginAnimations:@"Expando" context:self];
 	[UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
 	[UIView setAnimationDelegate:self];

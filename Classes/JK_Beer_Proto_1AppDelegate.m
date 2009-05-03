@@ -16,7 +16,6 @@
 @synthesize window;
 @synthesize navigationController;
 
-
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
 	
 	// Instantiate the database:

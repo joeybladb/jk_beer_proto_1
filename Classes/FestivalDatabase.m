@@ -94,111 +94,7 @@ FestivalDatabase* sDatabase = nil;
 		 [NSNumber numberWithFloat:1.0], OPKEY_LINE_WIDTH,
 		 [NSNumber numberWithInt:kCGLineCapRound], OPKEY_LINE_CAP_STYLE, nil];
 	[shape addOp:d];
-	
-	// Add trees
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.671128, 45.518493), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeSmall], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.671061, 45.518619), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeSmall], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670913, 45.518844), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670796, 45.519089), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670628, 45.519348), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	/////
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670479, 45.519598), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670347, 45.519820), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670213, 45.520109), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.670072, 45.520362), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669940, 45.520633), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669848, 45.520883), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669782, 45.521153), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669697, 45.521411), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669634, 45.521700), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
-		 GPMAKE_D(-122.669604, 45.521938), OPKEY_COORD, 
-		 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeSign], OPKEY_OP,
-		 GPMAKE_D(-122.671290, 45.518659), OPKEY_COORD, 
-		 [NSNumber numberWithInt:SignRestrooms], OPKEY_SIGN, nil];
-	[shape addOp:d];
-	
-	d = [NSDictionary dictionaryWithObjectsAndKeys:
-		 [NSNumber numberWithInt:ShapeSign], OPKEY_OP,
-		 GPMAKE_D(-122.669859, 45.521734), OPKEY_COORD, 
-		 [NSNumber numberWithInt:SignRestrooms], OPKEY_SIGN, nil];
-	[shape addOp:d];
-	
+		
 	return shape;
 }
 
@@ -210,19 +106,6 @@ FestivalDatabase* sDatabase = nil;
 	if (self)
 	{
 		NSMutableArray* a = [NSMutableArray arrayWithCapacity:100];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"restrooms.gif" atLocation:CGPointMake(50, 30) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"info.gif" atLocation:CGPointMake(300, 200) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"smoking.gif" atLocation:CGPointMake(80, 300) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"trash.gif" atLocation:CGPointMake(450, 800) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"restrooms.gif" atLocation:CGPointMake(10, 940) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"hops.png" atLocation:CGPointMake(10, 200) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 150) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 800) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(200, 150) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 800) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(200, 500) interactingWithUser:YES]];
-//		[a addObject:[[LocatableModelObject alloc] initWithImageName:@"beer28.jpeg" atLocation:CGPointMake(100, 600) interactingWithUser:YES]];
-		
 		Shape* s = nil;
 		NSDictionary* d = nil;
 				
@@ -241,27 +124,166 @@ FestivalDatabase* sDatabase = nil;
 		d = [NSDictionary dictionaryWithObjectsAndKeys:
 			 [NSNumber numberWithInt:ShapeRect], OPKEY_OP,
 			 GPMAKE_D(-122.670863, 45.519514), OPKEY_COORD,
-			 [NSNumber numberWithFloat:26], OPKEY_WIDTH_UTM,
-			 [NSNumber numberWithFloat:90], OPKEY_HEIGHT_UTM,
+			 [NSNumber numberWithFloat:18], OPKEY_WIDTH_UTM,
+			 [NSNumber numberWithFloat:60], OPKEY_HEIGHT_UTM,
 			 [NSNumber numberWithFloat:27.0], OPKEY_ROTATION_DEG,
 			 [UIColor colorWithRed:.9 green:0.9 blue:.99 alpha:.8], OPKEY_FILL_COLOR,
 			 [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.8], OPKEY_STROKE_COLOR,
 			 nil];
 		[s addOp:d];
-		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:YES named:@"South Tent"] autorelease]];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"South Tent"] autorelease]];
 
 		s = [[[Shape alloc] init] autorelease];
 		d = [NSDictionary dictionaryWithObjectsAndKeys:
 			 [NSNumber numberWithInt:ShapeRect], OPKEY_OP,
 			 GPMAKE_D(-122.669973, 45.521288), OPKEY_COORD,
-			 [NSNumber numberWithFloat:26], OPKEY_WIDTH_UTM,
-			 [NSNumber numberWithFloat:90], OPKEY_HEIGHT_UTM,
+			 [NSNumber numberWithFloat:18], OPKEY_WIDTH_UTM,
+			 [NSNumber numberWithFloat:60], OPKEY_HEIGHT_UTM,
 			 [NSNumber numberWithFloat:24.0], OPKEY_ROTATION_DEG,
 			 [UIColor colorWithRed:.9 green:0.9 blue:.99 alpha:.8], OPKEY_FILL_COLOR,
 			 [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:0.8], OPKEY_STROKE_COLOR,
 			 nil];
 		[s addOp:d];
-		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:YES named:@"North Tent"] autorelease]];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"North Tent"] autorelease]];
+
+		// Add trees
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.671128, 45.518493), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeSmall], OPKEY_TREE, nil];
+		[s addOp:d];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 01"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.671061, 45.518619), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeSmall], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 02"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.670913, 45.518844), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 03"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.670796, 45.519089), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 04"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.670628, 45.519348), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 05"] autorelease]];
+		/////
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.670479, 45.519598), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 06"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.670347, 45.519820), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 07"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.670213, 45.520109), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 08"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.670072, 45.520362), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 09"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.669940, 45.520633), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 10"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.669848, 45.520883), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 11"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.669782, 45.521153), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 12"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.669697, 45.521411), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 13"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.669634, 45.521700), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 14"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeTree], OPKEY_OP,
+			 GPMAKE_D(-122.669604, 45.521938), OPKEY_COORD, 
+			 [NSNumber numberWithInt:TreeMedium], OPKEY_TREE, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 15"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeSign], OPKEY_OP,
+			 GPMAKE_D(-122.671290, 45.518659), OPKEY_COORD, 
+			 [NSNumber numberWithInt:SignRestrooms], OPKEY_SIGN, nil];
+		[s addOp:d];
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 16"] autorelease]];
+		
+		s = [[[Shape alloc] init] autorelease];		
+		d = [NSDictionary dictionaryWithObjectsAndKeys:
+			 [NSNumber numberWithInt:ShapeSign], OPKEY_OP,
+			 GPMAKE_D(-122.669859, 45.521734), OPKEY_COORD, 
+			 [NSNumber numberWithInt:SignRestrooms], OPKEY_SIGN, nil];
+		[s addOp:d];		
+		[a addObject:[[[LocatableModelObject alloc] initWithShapeDatabase:s interactingWithUser:NO named:@"Tree 17"] autorelease]];
 		
 		mLocatables = [a retain];
 		sDatabase = self;

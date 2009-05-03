@@ -10,6 +10,7 @@
 #import "JK_Beer_Proto_1AppDelegate.h"
 #import "ListController.h"
 #import "MapController.h"
+#import "LatLongViewController.h"
 
 
 @implementation RootViewController
@@ -166,7 +167,11 @@
 
 - (void)gotoMap:(id)sender
 {
-	MapController *anotherViewController = [[MapController alloc] initWithNibName:@"MapController" bundle:nil];
+//	MapController *anotherViewController = [[MapController alloc] initWithNibName:@"MapController" bundle:nil];
+//	[self.navigationController pushViewController:anotherViewController animated:YES];
+//	[anotherViewController release];
+	
+	LatLongViewController *anotherViewController = [[LatLongViewController alloc] initWithNibName:@"LatLongController" bundle:nil];
 	[self.navigationController pushViewController:anotherViewController animated:YES];
 	[anotherViewController release];
 }

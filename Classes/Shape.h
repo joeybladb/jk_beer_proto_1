@@ -7,20 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MapGeometry.h"
 
 //
 // Shape is a collection of draw operations, typically expressed as geographical coordinates.
 //
-
-typedef struct {double x,y;} GeoPoint;
-typedef struct {double e, n; char nZ; long eZ; } UTMPoint;
-
-//
-// Convert between geo and utm points. Assumes WGS-84 datum.
-//
-UTMPoint ConvertGeoToUTMPoint(GeoPoint p);
-GeoPoint ConvertUTMToGeoPoint(UTMPoint u);
-
 
 // Operations that a shape can peform. Right now we assume that all coordinates are absolute, but I might make a shape that's relative, so it can work like a cookie cutter.
 typedef enum
@@ -37,6 +28,7 @@ typedef enum
 	ShapeArc,
 } ShapeOp;
 
+// Signs we can embed in a shape.
 typedef enum
 {
 	SignCoffee,
@@ -97,24 +89,12 @@ typedef enum
 #define OPKEY_WIDTH_UTM @"WDU"		// Rect: Width in meters
 #define OPKEY_HEIGHT_UTM @"HTU"		// Rect: Height in meters.
 
-NSData* CGPointToNSData(CGPoint p);
-CGPoint NSDataToCGPoint(NSData* d);
-
-// SMapCanvasGeometryDescriptor describes the mapping between geo and view coordinates. I'm letting Shape objects dictate their size and position.
-typedef struct 
-{
-	CGRect geoBounds;		// Bounds given in terms of decimal degrees origin (long,lat), size is decimal degrees delta (longD, latD). Cocoa "unflipped", where origin is (left,bottom).
-	CGRect viewFrame;		// Bounds of the entire view. This is a zero origin rectangle. It will be used to describe the frame of the MapView.
-	CGRect canvasRect;		// Bounds in view coordinates, maps to geoBounds proportionally. Flipped such that origin is (left,top)
-	CGRect localViewFrame;	// Frame of a view whose frame is expressed relative to viewFrame/canvasRect as bounds. This gets set before every instance of drawing, and is not global.
-	float rotationDegrees;	// A rotation in degrees.
-}
-SMapCanvasGeometryDescriptor;
-
 @class FestivalDatabase;
 
 @interface Shape : NSObject {
 	NSArray* mOps;	// a series of in-order operations to be performed. these are represented by dictionaries describing the operations.
+	CGRect mCachedViewRectangle;
+	NSTimeInterval mCachedViewRectangleGeometryTimeStamp;
 }
 
 +(UIImage*) imageForSign:(ShapeSignType)sign;
@@ -133,17 +113,3 @@ SMapCanvasGeometryDescriptor;
 -(GeoPoint)convertToGeoCoordinate:(CGPoint)point usingGeometry:(SMapCanvasGeometryDescriptor)geometry;
 
 @end
-
-@interface NSData (GeoPoint)
-+(NSData*)dataWithGeoPoint:(GeoPoint)p;
--(GeoPoint)geoPoint;
-@end
-
-NS_INLINE GeoPoint GPMAKE(double x, double y) { GeoPoint p; p.x=x; p.y=y; return p;}				// Make a static GeoPoint.
-NS_INLINE NSData* GPMAKE_D(double x, double y) { return [NSData dataWithGeoPoint:GPMAKE(x,y)]; }	// Make an NSData containing a GeoPoint -- for storing in arrays, dictionaries etc.
-NS_INLINE double DegreesToRadians(double degrees)
-{
-	const double conversion = 3.1415926535 / 180.0;
-	return degrees * conversion;
-}
-

@@ -11,6 +11,7 @@
 #import "LocatableObjectView.h"
 #import "FestivalDatabase.h"
 #import "ExpandingCircle.h"
+#import "MyTiledLayer.h"
 #import <QuartzCore/QuartzCore.h>
 
 @implementation MapView
@@ -19,7 +20,7 @@
 
 + (Class)layerClass                        // default is [CALayer class]. Used when creating the underlying layer for the view.
 {
-	return [CATiledLayer class];
+	return [MyTiledLayer class];
 }
 
 -(MapController*)controller
@@ -37,12 +38,6 @@
     if (self = [super initWithFrame:geo.viewFrame]) {
         // Initialization code
 		mScale = 1.0;
-		// Populate the map with map objects
-//		NSArray* locs = [[FestivalDatabase sharedDatabase] locatables];
-//		LocatableModelObject* l;
-//		NSEnumerator* e = [locs objectEnumerator];
-//		while (nil != (l = [e nextObject]))
-//			[[LocatableObjectView alloc]intiWithObject:l forMapView:self];	// This will create and insert new map objects.
     }
     return self;
 }
@@ -61,12 +56,19 @@
 	CGContextRotateCTM(ctx, DegreesToRadians(geo.rotationDegrees));
 	CGContextTranslateCTM(ctx, -xTran, -yTran);
 
+	CGRect someOtherRect = CGContextGetClipBoundingBox(ctx);
+	
 	NSArray* locs = [[FestivalDatabase sharedDatabase] locatables];
 	LocatableModelObject* l;
 	NSEnumerator* e = [locs objectEnumerator];
 	while (nil != (l = [e nextObject]))
 	{
-		[[l shape] renderInContext:ctx withGeometry:geo andScale:mScale];
+		Shape* shape = [l shape];
+		CGRect viewR = [shape enclosingViewRectangeForGeometry:geo];
+		if (CGRectIntersectsRect(viewR, someOtherRect))
+		{
+			[shape renderInContext:ctx withGeometry:geo andScale:mScale];
+		}
 	}
 	
 	CGContextRestoreGState(ctx);
@@ -93,11 +95,24 @@
     NSUInteger numTaps = [touch tapCount];
     if (numTaps < 2) 
 	{
-		CGPoint l = [touch locationInView:self];
-		CGRect r = CGRectMake(l.x - 2, l.y - 2, 2, 2);
-		ExpandingCircle* ep = [[[ExpandingCircle alloc] initWithFrame:r] autorelease];
-		[self addSubview:ep];
-		[ep	expandToNothing];
+		SMapCanvasGeometryDescriptor geo = [[MapController activeMapController] geometry];
+		CGPoint hitPointInViewCoords = [touch locationInView:self];
+		NSEnumerator* e = [[[FestivalDatabase sharedDatabase] locatables] objectEnumerator];
+		LocatableModelObject* loc;
+		while (nil != (loc = [e nextObject]))
+		{
+			if (CGRectContainsPoint([loc.shape enclosingViewRectangeForGeometry:geo], hitPointInViewCoords))
+			{
+				if ([loc interactsWithUser])
+				{
+					[[MapController activeMapController] objectClicked:loc];
+					break;
+				}
+				else
+					[[MapController activeMapController] objectClicked:nil];
+			}
+			
+		}
 	} 
 	else	// TODO: implement double-click zoom in on spot.
 		[self.nextResponder touchesBegan:touches withEvent:event];

@@ -13,51 +13,6 @@
 #import "MinMax.h"
 #import "ngiutm.h"
 
-UTMPoint ConvertGeoToUTMPoint(GeoPoint p)
-{
-	UTMPoint u;
-	if (ngi_convert_geodetic_to_utm(p.y, p.x, &u.nZ, &u.eZ, &u.n, &u.e))
-		NSLog(@"*** err: geo to utm conversion!");
-	return u;
-}
-
-GeoPoint ConvertUTMToGeoPoint(UTMPoint u)
-{
-	GeoPoint p;
-	if (ngi_convert_utm_to_geodetic(u.nZ, u.eZ, u.n, u.e, &p.y, &p.x))
-		NSLog(@"*** err: utm to geo conversion!");
-	return p;
-}
-
-
-NS_INLINE GeoPoint Rotate(GeoPoint point, double angle)
-{ 
-	float xold,yold;
-	GeoPoint newpoint;
-	angle = DegreesToRadians(angle);
-	xold=point.x;
-	yold=point.y;
-	newpoint.x= xold*cos(angle)-yold*sin(angle);
-	newpoint.y= xold*sin(angle)+yold*cos(angle);
-	return newpoint;
-}
-
-
-NSData* CGPointToNSData(CGPoint p)
-{
-	CGPoint local = p;
-	return [NSData dataWithBytes:&local length:sizeof(local)];
-}
-
-CGPoint NSDataToCGPoint(NSData* d)
-{
-//	CGPoint p = CGPointFromString((NSString*) d);
-//	return p;
-	CGPoint p;
-	[d getBytes:&p length:sizeof(CGPoint)];
-	return p;
-}
-
 typedef struct  
 {
 	CGRect geoRect, viewRect;
@@ -67,26 +22,77 @@ NSMutableDictionary* sSignCache = nil;
 
 @implementation Shape
 
--(SRectPair) _pairForRectOp:(NSDictionary*)d andGeometry:(SMapCanvasGeometryDescriptor*)geo	// Given op dictionary w/ Rect opcode and optional geo rectangle, return geo and view rectangles. if geo is nil, then view rectangle will be inoperable.
+-(SRectPair) _calculateRectGeometry:(NSDictionary*)d andGeometry:(SMapCanvasGeometryDescriptor*)geo	andPath:(CGMutablePathRef)path		// Given op dictionary w/ Rect opcode and optional geo rectangle, return geo and view rectangles. if geo is nil, then view rectangle will be inoperable.
 {
 	SRectPair pair;
 	double	width = [[d objectForKey:OPKEY_WIDTH_UTM] floatValue], 
 			height = [[d objectForKey:OPKEY_HEIGHT_UTM] floatValue];
 
 	GeoPoint geoPt = [(NSData*) [d objectForKey:OPKEY_COORD] geoPoint];
+	CGFloat rotationDegrees = [(NSNumber*) [d objectForKey:OPKEY_ROTATION_DEG] floatValue];
 	
-	UTMPoint uP = ConvertGeoToUTMPoint(geoPt);
-	UTMPoint uLeftTop = uP, uRightBottom = uP;
-	uLeftTop.e -= width / 2.0;
-	uLeftTop.n -= height / 2.0;
-	uRightBottom.e += width / 2.0;
-	uRightBottom.n += height / 2.0;
-	GeoPoint lt = ConvertUTMToGeoPoint(uLeftTop), rb = ConvertUTMToGeoPoint(uRightBottom);
+	// Take the center point of the rectangle, convert to UTM:
+	UTMPoint utmPt = ConvertGeoToUTMPoint(geoPt);
+	// Now calc the left-top, and right-bottom point based on width and height in meters.
+	UTMPoint utmLeftTopPt = utmPt;
+	UTMPoint utmRightBottomPt = utmPt;
+	utmLeftTopPt.e -= width / 2.0;
+	utmLeftTopPt.n -= height / 2.0;
+	utmRightBottomPt.e += width / 2.0;
+	utmRightBottomPt.n += height / 2.0;
+	
+	// Convert the two corners of the rect back to geo-space.
+	GeoPoint lt = ConvertUTMToGeoPoint(utmLeftTopPt), rb = ConvertUTMToGeoPoint(utmRightBottomPt);
+
+	// Now calculate the other 2 corners in the event that we need to perform a rotation or add to a path, or both:
+	GeoPoint lb = GPMAKE(lt.x, rb.y), rt = GPMAKE(rb.x, lt.y);
+	
+	// Write the geoRect:
 	pair.geoRect = CGRectMake(lt.x, lt.y, rb.x-lt.x, rb.y-lt.y);
+	
+	// If we've got a rotation, then we want to return the rectangle perpendicular to the axes that contains the shape:
+	if (rotationDegrees != 0.0)
+	{	
+		lt = TranslateAndRotate(lt, geoPt, -rotationDegrees);
+		rb = TranslateAndRotate(rb, geoPt, -rotationDegrees);
+		lb = TranslateAndRotate(lb, geoPt, -rotationDegrees);
+		rt = TranslateAndRotate(rt, geoPt, -rotationDegrees);
+		// Min-max the rotated point:
+		MinMax mm = MinMaxInit();
+		mm = MinMaxForGeoPoint(mm, lt);
+		mm = MinMaxForGeoPoint(mm, rb);
+		mm = MinMaxForGeoPoint(mm, lb);
+		mm = MinMaxForGeoPoint(mm, rt);
+		// And get the rectangle whose bounds are the min-max
+		pair.geoRect = CGRectStandardize(CGRectFromMinMax(mm));
+	}
+
+	// If we've got a geometry, then we can convert geo coordinates directly to view coordinates, and optionally fill out a path:
 	if (geo)
-	{
-		CGPoint gLT = [self convertToViewCoordinate:lt usingGeometry:*geo], gRB = [self convertToViewCoordinate:rb usingGeometry:*geo];
-		pair.viewRect = CGRectStandardize(CGRectMake(gLT.x, gLT.y, gRB.x - gLT.x, gRB.y - gLT.y));
+	{	
+		// Convert the geoRect to a view based rectangle. This will handle rotation for us (where we want a rectangle perpendicular to the axes containing the rotated rectangle):
+		CGPoint geoLeftTop = [self convertToViewCoordinate:GPMAKE(pair.geoRect.origin.x, pair.geoRect.origin.y) usingGeometry:*geo];
+		CGPoint geoRightBottom = [self convertToViewCoordinate:GPMAKE(pair.geoRect.origin.x + pair.geoRect.size.width, pair.geoRect.origin.y + pair.geoRect.size.height) usingGeometry:*geo];
+		pair.viewRect = CGRectStandardize(CGRectMake(geoLeftTop.x, geoLeftTop.y, geoRightBottom.x - geoLeftTop.x, geoRightBottom.y - geoLeftTop.y));
+
+		// We are to add points to a path:
+		if (path)
+		{	// If we are rotating, we'll add the 4 corners of the rectangle to the path.
+			if (rotationDegrees != 0.0)
+			{
+				CGPoint gLT = [self convertToViewCoordinate:lt usingGeometry:*geo];
+				CGPoint gLB = [self convertToViewCoordinate:lb usingGeometry:*geo];
+				CGPoint gRT = [self convertToViewCoordinate:rt usingGeometry:*geo];
+				CGPoint gRB = [self convertToViewCoordinate:rb usingGeometry:*geo];
+				CGPathMoveToPoint(path, nil, gLT.x, gLT.y);
+				CGPathAddLineToPoint(path, nil, gLB.x, gLB.y);
+				CGPathAddLineToPoint(path, nil, gRB.x, gRB.y);
+				CGPathAddLineToPoint(path, nil, gRT.x, gRT.y);
+				CGPathAddLineToPoint(path, nil, gLT.x, gLT.y);
+			}
+			else
+				CGPathAddRect(path, nil, pair.viewRect);
+		}
 	}
 	else
 		pair.viewRect = CGRectNull;
@@ -112,7 +118,7 @@ NSMutableDictionary* sSignCache = nil;
 		ShapeOp op = (ShapeOp) [[d objectForKey:OPKEY_OP] intValue];
 		if (op == ShapeRect)
 		{
-			SRectPair pair = [self _pairForRectOp:d andGeometry:nil];
+			SRectPair pair = [self _calculateRectGeometry:d andGeometry:nil andPath:nil];
 			mm = MinMaxForCGRect(mm, pair.geoRect);
 		}
 	}
@@ -245,6 +251,8 @@ NSMutableDictionary* sSignCache = nil;
 	if (self)
 	{
 		mOps = [[NSArray array] retain];
+		mCachedViewRectangle = CGRectZero;
+		mCachedViewRectangleGeometryTimeStamp = 0.0;
 	}
 	return self;
 }
@@ -274,7 +282,7 @@ NSMutableDictionary* sSignCache = nil;
 		else	
 			biggieRect = CGRectUnion(biggieRect, [[l shape] enclosingGeoRectangle]);
 	}
-	NSLog(@"### size of biggieRect before rotation: %@", NSStringFromCGSize(biggieRect.size));
+
 	if (degrees != 0.0)	// Rotate the biggieRect on its mid point:
 	{
 		CGFloat xOffset = CGRectGetMidX(biggieRect), yOffset = CGRectGetMidY(biggieRect);
@@ -293,7 +301,8 @@ NSMutableDictionary* sSignCache = nil;
 	geo.viewFrame = CGRectMake(0, 0, width, width * (geo.geoBounds.size.height / geo.geoBounds.size.width));
 	geo.canvasRect = CGRectInset(geo.viewFrame, inset, inset);
 	geo.localViewFrame = CGRectMake(0,0,0,0);
-
+	geo.startViewFrame = geo.viewFrame;
+	geo.modTime = CFAbsoluteTimeGetCurrent();
 	return geo;
 }
 
@@ -406,24 +415,16 @@ NSMutableDictionary* sSignCache = nil;
 				
 			case ShapeRect:
 			{
-				CGFloat rotate = [[d objectForKey:OPKEY_ROTATION_DEG] floatValue];				
-				SRectPair pair = [self _pairForRectOp:d andGeometry:&geometry];
-				CGContextSaveGState(ctx);
+				CGMutablePathRef path = CGPathCreateMutable();
+				[self _calculateRectGeometry:d andGeometry:&geometry andPath:path];
+				CGContextAddPath(ctx, path);
 				fillColor = [d objectForKey:OPKEY_FILL_COLOR];
 				if (fillColor)
 					CGContextSetFillColor(ctx, [fillColor components]);
 				strokeColor = [d objectForKey:OPKEY_STROKE_COLOR];
 				if (strokeColor)
 					CGContextSetStrokeColor(ctx, [strokeColor components]);
-				if (rotate != 0.0)
-				{
-					CGContextTranslateCTM(ctx, CGRectGetMidX(pair.viewRect), CGRectGetMidY(pair.viewRect));
-					CGContextRotateCTM(ctx, DegreesToRadians(rotate));
-					CGContextTranslateCTM(ctx, -CGRectGetMidX(pair.viewRect), -CGRectGetMidY(pair.viewRect));
-				}
-				CGContextAddRect(ctx, pair.viewRect);
-				CGContextDrawPath(ctx, kCGPathEOFillStroke);
-				CGContextRestoreGState(ctx);
+				CGContextDrawPath(ctx, kCGPathEOFillStroke);				
 			}
 				break;
 
@@ -435,6 +436,9 @@ NSMutableDictionary* sSignCache = nil;
 
 -(CGRect) enclosingViewRectangeForGeometry:(SMapCanvasGeometryDescriptor)geometry	// Given a canvas rect in view coordinates, return the shape's enclosing  rectangle, also in view coordinates. Canvas = the portion we wish to map.
 {
+	if (geometry.modTime == mCachedViewRectangleGeometryTimeStamp)
+		return mCachedViewRectangle;
+	
 	// find min and max vertices etc.
 	MinMax mm = MinMaxInit();
 	NSDictionary* d;
@@ -463,8 +467,16 @@ NSMutableDictionary* sSignCache = nil;
 			
 			if (op == ShapeRect)
 			{
-				SRectPair pair = [self _pairForRectOp:d andGeometry:&geometry];
+				SRectPair pair = [self _calculateRectGeometry:d andGeometry:&geometry andPath:nil];
 				anObjectRectangle = pair.viewRect;
+			}
+			
+			if (op == ShapeTree)
+			{
+				CGFloat scale = geometry.viewFrame.size.width / geometry.startViewFrame.size.width;
+				TreeType tt = [[d objectForKey:OPKEY_TREE] intValue];
+				int treeSize = (10 + (8 * tt)) * scale;
+				anObjectRectangle = CGRectMake(cgP.x - treeSize / 2, cgP.y - treeSize / 2, treeSize, treeSize);
 			}
 			
 			// If we have a bounds rectangle, then min/max it, as well.
@@ -474,8 +486,10 @@ NSMutableDictionary* sSignCache = nil;
 			}
 		}
 	}
-	
-	return CGRectFromMinMax(mm);
+	// Cache the view rectangle, and the geometry timestamp. If the geometry changes, we'll need to re-compute.
+	mCachedViewRectangle = CGRectFromMinMax(mm);
+	mCachedViewRectangleGeometryTimeStamp = geometry.modTime;
+	return mCachedViewRectangle;
 }
 
 -(NSString*)description
@@ -483,18 +497,4 @@ NSMutableDictionary* sSignCache = nil;
 	return [NSString stringWithFormat:@"Shape contains %d ops.", [mOps count]];
 }
 
-@end
-
-@implementation NSData (GeoPoint)
-+(NSData*)dataWithGeoPoint:(GeoPoint)p
-{
-	return [NSData dataWithBytes:&p length:sizeof(p)];
-}
-
--(GeoPoint)geoPoint
-{
-	GeoPoint p;
-	[self getBytes:&p length:sizeof(p)];
-	return p;
-}
 @end

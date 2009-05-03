@@ -12,5 +12,5 @@
 @interface ExpandingCircle : UIView {
 
 }
--(void)expandToNothing;
+-(void)expandToNothing:(CGFloat)maxRadius;
 @end

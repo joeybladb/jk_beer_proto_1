@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
+
 
 @interface JK_Beer_Proto_1AppDelegate : NSObject <UIApplicationDelegate> {
     

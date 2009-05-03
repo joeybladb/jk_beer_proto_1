@@ -61,7 +61,7 @@
 
 -(NSString*)briefDescription
 {
-	return @"I'm an object on the map.";
+	return [NSString stringWithFormat:@"I'm %@", mName];
 }
 
 @end

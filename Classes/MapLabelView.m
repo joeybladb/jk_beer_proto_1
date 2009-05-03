@@ -24,7 +24,6 @@
 		mNibItems = [[[NSBundle mainBundle] loadNibNamed:@"MapLabelView" owner:self options:nil] retain];
 		mLabelText.text = [object briefDescription];
 		self.opaque = NO;
-//		frame.origin = bottomNub ? CGPointMake(0,0) : CGPointMake(0,8);
 		CGRect newFrame = mLabelView.frame;
 		newFrame.origin = bottomNub ? CGPointMake(0,0) : CGPointMake(0,8);	// Offset if we're drawing a top nub.
 		newFrame.size = CGSizeMake(frame.size.width, mLabelView.frame.size.height);

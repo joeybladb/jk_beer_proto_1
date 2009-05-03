@@ -16,6 +16,10 @@
 		28AD73600D9D9599002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD735F0D9D9599002E5188 /* MainWindow.xib */; };
 		28C286E10D94DF7D0034E888 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28C286E00D94DF7D0034E888 /* RootViewController.m */; };
 		C411A0FE0FA554D400A357AA /* ExpandingCircle.m in Sources */ = {isa = PBXBuildFile; fileRef = C411A0FD0FA554D400A357AA /* ExpandingCircle.m */; };
+		C413E9E90FACB32F0023B21C /* LatLongViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C413E9E80FACB32F0023B21C /* LatLongViewController.m */; };
+		C413EA4D0FACC6100023B21C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C413EA4C0FACC6100023B21C /* CoreLocation.framework */; };
+		C413EBC30FAD49260023B21C /* LatLongController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C413EBC20FAD49260023B21C /* LatLongController.xib */; };
+		C413EC150FAD51AA0023B21C /* MeView.m in Sources */ = {isa = PBXBuildFile; fileRef = C413EC140FAD51AA0023B21C /* MeView.m */; };
 		C4148B130F7FFC7400838088 /* ListController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148B120F7FFC7400838088 /* ListController.m */; };
 		C4148B150F7FFCFF00838088 /* ListController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4148B140F7FFCFF00838088 /* ListController.xib */; };
 		C4148B2D0F80000400838088 /* MapController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148B2C0F80000400838088 /* MapController.m */; };
@@ -23,7 +27,6 @@
 		C4148B530F80081A00838088 /* BeerController.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148B520F80081A00838088 /* BeerController.m */; };
 		C4148B790F8009C200838088 /* BeerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4148B780F8009C200838088 /* BeerController.xib */; };
 		C4148C3E0F85858700838088 /* MapView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148C3D0F85858700838088 /* MapView.m */; };
-		C4148C9E0F88012D00838088 /* LocatableObjectView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148C9D0F88012D00838088 /* LocatableObjectView.m */; };
 		C4148D0C0F880A7800838088 /* FestivalDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148D0B0F880A7800838088 /* FestivalDatabase.m */; };
 		C4148D0F0F880BBB00838088 /* LocatableModelObject.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148D0E0F880BBB00838088 /* LocatableModelObject.m */; };
 		C4148D120F880C0200838088 /* Shape.m in Sources */ = {isa = PBXBuildFile; fileRef = C4148D110F880C0200838088 /* Shape.m */; };
@@ -57,6 +60,8 @@
 		C474B2FF0FA41C050086B49D /* tranmerc.c in Sources */ = {isa = PBXBuildFile; fileRef = C474B2F90FA41C050086B49D /* tranmerc.c */; };
 		C474B3000FA41C050086B49D /* utm.c in Sources */ = {isa = PBXBuildFile; fileRef = C474B2FC0FA41C050086B49D /* utm.c */; };
 		C4C024EB0F925CE9007E5B3B /* MapControllerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C4C024EA0F925CE9007E5B3B /* MapControllerAdditions.m */; };
+		C4EBFC680FA734F200D00C15 /* MyTiledLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EBFC670FA734F200D00C15 /* MyTiledLayer.m */; };
+		C4EBFC700FA735C000D00C15 /* MapGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EBFC6F0FA735C000D00C15 /* MapGeometry.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +80,12 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C411A0FC0FA554D400A357AA /* ExpandingCircle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExpandingCircle.h; sourceTree = "<group>"; };
 		C411A0FD0FA554D400A357AA /* ExpandingCircle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExpandingCircle.m; sourceTree = "<group>"; };
+		C413E9E70FACB32F0023B21C /* LatLongViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LatLongViewController.h; sourceTree = "<group>"; };
+		C413E9E80FACB32F0023B21C /* LatLongViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LatLongViewController.m; sourceTree = "<group>"; };
+		C413EA4C0FACC6100023B21C /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C413EBC20FAD49260023B21C /* LatLongController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LatLongController.xib; sourceTree = "<group>"; };
+		C413EC130FAD51AA0023B21C /* MeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeView.h; sourceTree = "<group>"; };
+		C413EC140FAD51AA0023B21C /* MeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeView.m; sourceTree = "<group>"; };
 		C4148B110F7FFC7400838088 /* ListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ListController.h; sourceTree = "<group>"; };
 		C4148B120F7FFC7400838088 /* ListController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ListController.m; sourceTree = "<group>"; };
 		C4148B140F7FFCFF00838088 /* ListController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ListController.xib; sourceTree = "<group>"; };
@@ -86,8 +97,6 @@
 		C4148B780F8009C200838088 /* BeerController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BeerController.xib; sourceTree = "<group>"; };
 		C4148C3C0F85858700838088 /* MapView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapView.h; sourceTree = "<group>"; };
 		C4148C3D0F85858700838088 /* MapView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapView.m; sourceTree = "<group>"; };
-		C4148C9C0F88012D00838088 /* LocatableObjectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocatableObjectView.h; sourceTree = "<group>"; };
-		C4148C9D0F88012D00838088 /* LocatableObjectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocatableObjectView.m; sourceTree = "<group>"; };
 		C4148D0A0F880A7800838088 /* FestivalDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FestivalDatabase.h; sourceTree = "<group>"; };
 		C4148D0B0F880A7800838088 /* FestivalDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FestivalDatabase.m; sourceTree = "<group>"; };
 		C4148D0D0F880BBB00838088 /* LocatableModelObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocatableModelObject.h; sourceTree = "<group>"; };
@@ -130,6 +139,10 @@
 		C474B2FD0FA41C050086B49D /* utm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utm.h; sourceTree = "<group>"; };
 		C474B3780FA42F2A0086B49D /* MinMax.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinMax.h; sourceTree = "<group>"; };
 		C4C024EA0F925CE9007E5B3B /* MapControllerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapControllerAdditions.m; sourceTree = "<group>"; };
+		C4EBFC660FA734F200D00C15 /* MyTiledLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTiledLayer.h; sourceTree = "<group>"; };
+		C4EBFC670FA734F200D00C15 /* MyTiledLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTiledLayer.m; sourceTree = "<group>"; };
+		C4EBFC6E0FA735C000D00C15 /* MapGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapGeometry.h; sourceTree = "<group>"; };
+		C4EBFC6F0FA735C000D00C15 /* MapGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapGeometry.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +154,7 @@
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				2892E4100DC94CBA00A64D0F /* CoreGraphics.framework in Frameworks */,
 				C474B26E0FA396550086B49D /* QuartzCore.framework in Frameworks */,
+				C413EA4D0FACC6100023B21C /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +176,8 @@
 				C4148B120F7FFC7400838088 /* ListController.m */,
 				C4148B510F80081A00838088 /* BeerController.h */,
 				C4148B520F80081A00838088 /* BeerController.m */,
+				C413E9E70FACB32F0023B21C /* LatLongViewController.h */,
+				C413E9E80FACB32F0023B21C /* LatLongViewController.m */,
 				C4A168870F91E756002C37D7 /* Map */,
 				C414901D0F8868AD00838088 /* UIColor+Components.h */,
 				C414901E0F8868AD00838088 /* UIColor+Components.m */,
@@ -207,6 +223,7 @@
 				C4148B2E0F80006A00838088 /* MapController.xib */,
 				C4148B780F8009C200838088 /* BeerController.xib */,
 				C4148EC00F8824DF00838088 /* MapLabelView.xib */,
+				C413EBC20FAD49260023B21C /* LatLongController.xib */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				C4148D940F881A1200838088 /* imgs */,
 			);
@@ -220,6 +237,7 @@
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				2892E40F0DC94CBA00A64D0F /* CoreGraphics.framework */,
+				C413EA4C0FACC6100023B21C /* CoreLocation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -295,11 +313,15 @@
 				C4148EBE0F88249600838088 /* MapLabelView.m */,
 				C4148D100F880C0200838088 /* Shape.h */,
 				C4148D110F880C0200838088 /* Shape.m */,
-				C4148C9C0F88012D00838088 /* LocatableObjectView.h */,
-				C4148C9D0F88012D00838088 /* LocatableObjectView.m */,
 				C474B3780FA42F2A0086B49D /* MinMax.h */,
 				C411A0FC0FA554D400A357AA /* ExpandingCircle.h */,
 				C411A0FD0FA554D400A357AA /* ExpandingCircle.m */,
+				C4EBFC660FA734F200D00C15 /* MyTiledLayer.h */,
+				C4EBFC670FA734F200D00C15 /* MyTiledLayer.m */,
+				C4EBFC6E0FA735C000D00C15 /* MapGeometry.h */,
+				C4EBFC6F0FA735C000D00C15 /* MapGeometry.m */,
+				C413EC130FAD51AA0023B21C /* MeView.h */,
+				C413EC140FAD51AA0023B21C /* MeView.m */,
 				C474B2F50FA41C050086B49D /* UTM */,
 			);
 			name = Map;
@@ -382,6 +404,7 @@
 				C4148DBF0F881A1200838088 /* trash.gif in Resources */,
 				C4148DC00F881A1200838088 /* womensrr.gif in Resources */,
 				C4148EC10F8824DF00838088 /* MapLabelView.xib in Resources */,
+				C413EBC30FAD49260023B21C /* LatLongController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,7 +422,6 @@
 				C4148B2D0F80000400838088 /* MapController.m in Sources */,
 				C4148B530F80081A00838088 /* BeerController.m in Sources */,
 				C4148C3E0F85858700838088 /* MapView.m in Sources */,
-				C4148C9E0F88012D00838088 /* LocatableObjectView.m in Sources */,
 				C4148D0C0F880A7800838088 /* FestivalDatabase.m in Sources */,
 				C4148D0F0F880BBB00838088 /* LocatableModelObject.m in Sources */,
 				C4148D120F880C0200838088 /* Shape.m in Sources */,
@@ -410,6 +432,10 @@
 				C474B2FF0FA41C050086B49D /* tranmerc.c in Sources */,
 				C474B3000FA41C050086B49D /* utm.c in Sources */,
 				C411A0FE0FA554D400A357AA /* ExpandingCircle.m in Sources */,
+				C4EBFC680FA734F200D00C15 /* MyTiledLayer.m in Sources */,
+				C4EBFC700FA735C000D00C15 /* MapGeometry.m in Sources */,
+				C413E9E90FACB32F0023B21C /* LatLongViewController.m in Sources */,
+				C413EC150FAD51AA0023B21C /* MeView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
