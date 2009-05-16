@@ -12,5 +12,6 @@
 @interface UIColor (Components)
 
 -(const CGFloat*)components;
+-(NSDictionary*) componentsDescription;
 
 @end

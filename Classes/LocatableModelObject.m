@@ -8,7 +8,6 @@
 
 #import "LocatableModelObject.h"
 
-
 @implementation LocatableModelObject
 
 @synthesize name=mName;
@@ -33,6 +32,7 @@
 		mName = [name retain];
 		mShape = [shape retain];
 		mInteractsWithUser = interacting;
+		NSLog(@"Shape: %@", [shape serializedString]);
 	}
 	return self;
 }

@@ -24,4 +24,5 @@ extern double gLat, gLong, gAcc;
 }
 
 -(IBAction)onButtonClick:(id)sender;	// Means advance to the map page.
+-(IBAction)onIgnoreClick:(id)sender;
 @end

@@ -98,6 +98,17 @@ double gLat = 0.0, gLong = 0.0, gAcc = 0.0;
 }
 
 
+-(IBAction)onIgnoreClick:(id)sender
+{
+	[mLocator stopUpdatingLocation];
+	gLat = 0.0;
+	gLong = 0.0;
+	gAcc = 0.0;
+	MapController *anotherViewController = [[MapController alloc] initWithNibName:@"MapController" bundle:nil];
+	[self.navigationController pushViewController:anotherViewController animated:YES];
+	[anotherViewController release];
+}
+
 - (void)dealloc {
     [super dealloc];
 }

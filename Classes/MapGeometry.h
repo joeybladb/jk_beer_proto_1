@@ -34,13 +34,13 @@ GeoPoint ConvertUTMToGeoPoint(UTMPoint u);
 NSData* CGPointToNSData(CGPoint p);
 CGPoint NSDataToCGPoint(NSData* d);
 
-@interface NSData (GeoPoint)
-+(NSData*)dataWithGeoPoint:(GeoPoint)p;
+@interface NSDictionary (GeoPoint)
++(NSDictionary*)dictionaryWithGeoPoint:(GeoPoint)p;
 -(GeoPoint)geoPoint;
 @end
 
 NS_INLINE GeoPoint GPMAKE(double x, double y) { GeoPoint p; p.x=x; p.y=y; return p;}				// Make a static GeoPoint.
-NS_INLINE NSData* GPMAKE_D(double x, double y) { return [NSData dataWithGeoPoint:GPMAKE(x,y)]; }	// Make an NSData containing a GeoPoint -- for storing in arrays, dictionaries etc.
+NS_INLINE id GPMAKE_D(double x, double y) { return [NSDictionary dictionaryWithGeoPoint:GPMAKE(x,y)]; }	// Make an NSData containing a GeoPoint -- for storing in arrays, dictionaries etc.
 NS_INLINE double DegreesToRadians(double degrees)
 {
 	const double conversion = 3.1415926535 / 180.0;

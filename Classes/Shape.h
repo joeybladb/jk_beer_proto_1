@@ -112,4 +112,5 @@ typedef enum
 -(CGPoint)convertToViewCoordinate:(GeoPoint)geoPoint usingGeometry:(SMapCanvasGeometryDescriptor)geometry;
 -(GeoPoint)convertToGeoCoordinate:(CGPoint)point usingGeometry:(SMapCanvasGeometryDescriptor)geometry;
 
+-(NSString*)serializedString;
 @end

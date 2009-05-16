@@ -12,6 +12,8 @@
 #import "LocatableModelObject.h"
 #import "MinMax.h"
 #import "ngiutm.h"
+#import "NSObject+SBJSON.h"
+#import "MapGeometry.h"
 
 typedef struct  
 {
@@ -28,7 +30,7 @@ NSMutableDictionary* sSignCache = nil;
 	double	width = [[d objectForKey:OPKEY_WIDTH_UTM] floatValue], 
 			height = [[d objectForKey:OPKEY_HEIGHT_UTM] floatValue];
 
-	GeoPoint geoPt = [(NSData*) [d objectForKey:OPKEY_COORD] geoPoint];
+	GeoPoint geoPt = [(NSDictionary*) [d objectForKey:OPKEY_COORD] geoPoint];
 	CGFloat rotationDegrees = [(NSNumber*) [d objectForKey:OPKEY_ROTATION_DEG] floatValue];
 	
 	// Take the center point of the rectangle, convert to UTM:
@@ -78,8 +80,13 @@ NSMutableDictionary* sSignCache = nil;
 		// We are to add points to a path:
 		if (path)
 		{	// If we are rotating, we'll add the 4 corners of the rectangle to the path.
+			CGAffineTransform rotateCTM = CGAffineTransformIdentity;
+
 			if (rotationDegrees != 0.0)
 			{
+//				rotateCTM = CGAffineTransformTranslate(rotateCTM, CGRectGetMidX(pair.viewRect), CGRectGetMidY(pair.viewRect));
+//				rotateCTM = CGAffineTransformRotate(rotateCTM, DegreesToRadians(rotationDegrees));
+		
 				CGPoint gLT = [self convertToViewCoordinate:lt usingGeometry:*geo];
 				CGPoint gLB = [self convertToViewCoordinate:lb usingGeometry:*geo];
 				CGPoint gRT = [self convertToViewCoordinate:rt usingGeometry:*geo];
@@ -91,7 +98,7 @@ NSMutableDictionary* sSignCache = nil;
 				CGPathAddLineToPoint(path, nil, gLT.x, gLT.y);
 			}
 			else
-				CGPathAddRect(path, nil, pair.viewRect);
+				CGPathAddRect(path, &rotateCTM, pair.viewRect);
 		}
 	}
 	else
@@ -108,7 +115,7 @@ NSMutableDictionary* sSignCache = nil;
 	
 	while (nil != (d = [e nextObject]))
 	{
-		NSData* data = (NSData*) [d objectForKey:OPKEY_COORD];
+		NSDictionary* data = (NSDictionary*) [d objectForKey:OPKEY_COORD];
 		if (data)
 		{
 			GeoPoint p = [data geoPoint];
@@ -333,7 +340,7 @@ NSMutableDictionary* sSignCache = nil;
 		ShapeOp op = (ShapeOp) [[d objectForKey:OPKEY_OP] intValue];
 		UIColor* fillColor = nil, *strokeColor = nil;
 
-		GeoPoint geoPt = [(NSData*)[d objectForKey:OPKEY_COORD] geoPoint];	// Fetch coordinate if available, and translate-scale-translate to new coordinates.
+		GeoPoint geoPt = [(NSDictionary*)[d objectForKey:OPKEY_COORD] geoPoint];	// Fetch coordinate if available, and translate-scale-translate to new coordinates.
 		CGPoint p;
 		p = [self convertToViewCoordinate:geoPt usingGeometry:geometry];
 		
@@ -447,7 +454,7 @@ NSMutableDictionary* sSignCache = nil;
 	while (nil != (d = [e nextObject]))
 	{
 		// For right now, just look for points:
-		NSData* data = (NSData*) [d objectForKey:OPKEY_COORD];
+		NSDictionary* data = (NSDictionary*) [d objectForKey:OPKEY_COORD];
 		ShapeOp op = (ShapeOp) [[d objectForKey:OPKEY_OP] intValue];
 		if (data)
 		{
@@ -497,4 +504,8 @@ NSMutableDictionary* sSignCache = nil;
 	return [NSString stringWithFormat:@"Shape contains %d ops.", [mOps count]];
 }
 
+-(NSString*)serializedString
+{
+	return [mOps JSONRepresentation];
+}
 @end

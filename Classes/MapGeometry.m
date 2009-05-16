@@ -42,16 +42,14 @@ CGPoint NSDataToCGPoint(NSData* d)
 	return p;
 }
 
-@implementation NSData (GeoPoint)
-+(NSData*)dataWithGeoPoint:(GeoPoint)p
+@implementation NSDictionary (GeoPoint)
++(NSDictionary*)dictionaryWithGeoPoint:(GeoPoint)p
 {
-	return [NSData dataWithBytes:&p length:sizeof(p)];
+	return [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:p.x], @"x", [NSNumber numberWithDouble:p.y], @"y", nil];
 }
 
 -(GeoPoint)geoPoint
 {
-	GeoPoint p;
-	[self getBytes:&p length:sizeof(p)];
-	return p;
+	return GPMAKE([[self objectForKey:@"x"] doubleValue], [[self objectForKey:@"y"] doubleValue]);
 }
 @end

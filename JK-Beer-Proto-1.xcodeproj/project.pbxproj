@@ -60,9 +60,27 @@
 		C474B2FF0FA41C050086B49D /* tranmerc.c in Sources */ = {isa = PBXBuildFile; fileRef = C474B2F90FA41C050086B49D /* tranmerc.c */; };
 		C474B3000FA41C050086B49D /* utm.c in Sources */ = {isa = PBXBuildFile; fileRef = C474B2FC0FA41C050086B49D /* utm.c */; };
 		C4C024EB0F925CE9007E5B3B /* MapControllerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C4C024EA0F925CE9007E5B3B /* MapControllerAdditions.m */; };
+		C4D62F090FBF55F600633EAF /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D62EFE0FBF55F600633EAF /* NSObject+SBJSON.m */; };
+		C4D62F0A0FBF55F600633EAF /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D62F000FBF55F600633EAF /* NSString+SBJSON.m */; };
+		C4D62F0B0FBF55F600633EAF /* SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D62F020FBF55F600633EAF /* SBJSON.m */; };
+		C4D62F0C0FBF55F600633EAF /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D62F040FBF55F600633EAF /* SBJsonBase.m */; };
+		C4D62F0D0FBF55F600633EAF /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D62F060FBF55F600633EAF /* SBJsonParser.m */; };
+		C4D62F0E0FBF55F600633EAF /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D62F080FBF55F600633EAF /* SBJsonWriter.m */; };
 		C4EBFC680FA734F200D00C15 /* MyTiledLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EBFC670FA734F200D00C15 /* MyTiledLayer.m */; };
 		C4EBFC700FA735C000D00C15 /* MapGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = C4EBFC6F0FA735C000D00C15 /* MapGeometry.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C4D62E6A0FB747A400633EAF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -139,6 +157,19 @@
 		C474B2FD0FA41C050086B49D /* utm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utm.h; sourceTree = "<group>"; };
 		C474B3780FA42F2A0086B49D /* MinMax.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MinMax.h; sourceTree = "<group>"; };
 		C4C024EA0F925CE9007E5B3B /* MapControllerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapControllerAdditions.m; sourceTree = "<group>"; };
+		C4D62EFC0FBF55F600633EAF /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
+		C4D62EFD0FBF55F600633EAF /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
+		C4D62EFE0FBF55F600633EAF /* NSObject+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJSON.m"; sourceTree = "<group>"; };
+		C4D62EFF0FBF55F600633EAF /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SBJSON.h"; sourceTree = "<group>"; };
+		C4D62F000FBF55F600633EAF /* NSString+SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+SBJSON.m"; sourceTree = "<group>"; };
+		C4D62F010FBF55F600633EAF /* SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJSON.h; sourceTree = "<group>"; };
+		C4D62F020FBF55F600633EAF /* SBJSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJSON.m; sourceTree = "<group>"; };
+		C4D62F030FBF55F600633EAF /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
+		C4D62F040FBF55F600633EAF /* SBJsonBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonBase.m; sourceTree = "<group>"; };
+		C4D62F050FBF55F600633EAF /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
+		C4D62F060FBF55F600633EAF /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
+		C4D62F070FBF55F600633EAF /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
+		C4D62F080FBF55F600633EAF /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
 		C4EBFC660FA734F200D00C15 /* MyTiledLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTiledLayer.h; sourceTree = "<group>"; };
 		C4EBFC670FA734F200D00C15 /* MyTiledLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyTiledLayer.m; sourceTree = "<group>"; };
 		C4EBFC6E0FA735C000D00C15 /* MapGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapGeometry.h; sourceTree = "<group>"; };
@@ -164,6 +195,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C4D62EFB0FBF55F600633EAF /* JSON */,
 				C4148D0A0F880A7800838088 /* FestivalDatabase.h */,
 				C4148D0B0F880A7800838088 /* FestivalDatabase.m */,
 				C4148D0D0F880BBB00838088 /* LocatableModelObject.h */,
@@ -327,6 +359,26 @@
 			name = Map;
 			sourceTree = "<group>";
 		};
+		C4D62EFB0FBF55F600633EAF /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				C4D62EFC0FBF55F600633EAF /* JSON.h */,
+				C4D62EFD0FBF55F600633EAF /* NSObject+SBJSON.h */,
+				C4D62EFE0FBF55F600633EAF /* NSObject+SBJSON.m */,
+				C4D62EFF0FBF55F600633EAF /* NSString+SBJSON.h */,
+				C4D62F000FBF55F600633EAF /* NSString+SBJSON.m */,
+				C4D62F010FBF55F600633EAF /* SBJSON.h */,
+				C4D62F020FBF55F600633EAF /* SBJSON.m */,
+				C4D62F030FBF55F600633EAF /* SBJsonBase.h */,
+				C4D62F040FBF55F600633EAF /* SBJsonBase.m */,
+				C4D62F050FBF55F600633EAF /* SBJsonParser.h */,
+				C4D62F060FBF55F600633EAF /* SBJsonParser.m */,
+				C4D62F070FBF55F600633EAF /* SBJsonWriter.h */,
+				C4D62F080FBF55F600633EAF /* SBJsonWriter.m */,
+			);
+			path = JSON;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -337,6 +389,8 @@
 				1D60588D0D05DD3D006BFB54 /* Resources */,
 				1D60588E0D05DD3D006BFB54 /* Sources */,
 				1D60588F0D05DD3D006BFB54 /* Frameworks */,
+				C4D62E6A0FB747A400633EAF /* CopyFiles */,
+				C4D62ECE0FB756B400633EAF /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -410,6 +464,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		C4D62ECE0FB756B400633EAF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/bin/install_name_tool -change \"@loader_path/../Frameworks/JSON.framework/Versions/A/JSON\" \"@loader_path/Frameworks/JSON.framework/Versions/A/JSON\" \"$BUILT_PRODUCTS_DIR/$EXECUTABLE_PATH\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		1D60588E0D05DD3D006BFB54 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -436,6 +506,12 @@
 				C4EBFC700FA735C000D00C15 /* MapGeometry.m in Sources */,
 				C413E9E90FACB32F0023B21C /* LatLongViewController.m in Sources */,
 				C413EC150FAD51AA0023B21C /* MeView.m in Sources */,
+				C4D62F090FBF55F600633EAF /* NSObject+SBJSON.m in Sources */,
+				C4D62F0A0FBF55F600633EAF /* NSString+SBJSON.m in Sources */,
+				C4D62F0B0FBF55F600633EAF /* SBJSON.m in Sources */,
+				C4D62F0C0FBF55F600633EAF /* SBJsonBase.m in Sources */,
+				C4D62F0D0FBF55F600633EAF /* SBJsonParser.m in Sources */,
+				C4D62F0E0FBF55F600633EAF /* SBJsonWriter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,11 +523,16 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Library/Frameworks\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = JK_Beer_Proto_1_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "JK-Beer-Proto-1";
 			};
 			name = Debug;
@@ -461,9 +542,14 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../Library/Frameworks\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = JK_Beer_Proto_1_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "JK-Beer-Proto-1";
 			};
 			name = Release;
